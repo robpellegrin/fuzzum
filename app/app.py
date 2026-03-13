@@ -21,22 +21,11 @@ from utils.input_handler import InputHandler
 class App:
     def __init__(self, stdscr):
         root = sys.argv[1] if len(sys.argv) > 1 else "."
-
         self.files = self.scan_files(root)
         self.stdscr = stdscr
+        self.query = ""
 
         self.input = InputHandler(self)
-
-        curses.curs_set(1)
-        curses.start_color()
-        curses.use_default_colors()
-
-        stdscr.nodelay(True)
-        stdscr.timeout(25)
-
-        curses.init_pair(1, curses.COLOR_CYAN, -1)
-        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        curses.init_pair(3, curses.COLOR_YELLOW, -1)
 
         self.wm = WindowManager(self)
         self.wm.create()
@@ -48,16 +37,19 @@ class App:
         return Config()
 
     def run(self):
-        self.query = ""
         self.running = True
 
         while self.running:
-            key = self.stdscr.getch()
+            start_cursor = self.cursor
 
-            self.wm.search.update_query(self.query)
+            key = self.stdscr.getch()
 
             self.input.handle(key)
             self.wm.refresh()
+
+            # If the cursor moved, notify windows.
+            if start_cursor != self.cursor:
+                self.wm.details.needs_refresh = True
 
             curses.doupdate()
 
