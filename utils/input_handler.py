@@ -32,7 +32,7 @@ class InputHandler:
             self.app.running = False
 
         elif key == ord("?"):
-            self.app.help.show()
+            self.app.wm.help.show()
 
         elif key == ord("."):
             self.app.wm.results.toggle_hidden_files()

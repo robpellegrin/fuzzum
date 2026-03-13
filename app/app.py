@@ -12,7 +12,7 @@ import curses
 import os
 import sys
 
-from ui.help_popup import HelpPopup
+
 from ui.window_manager import WindowManager
 from utils.config import Config
 from utils.input_handler import InputHandler
@@ -47,10 +47,6 @@ class App:
     def config(self):
         return Config()
 
-    @property
-    def help(self):
-        return HelpPopup(self)
-
     def run(self):
         self.query = ""
         self.running = True
@@ -62,6 +58,8 @@ class App:
 
             self.input.handle(key)
             self.wm.refresh()
+
+            curses.doupdate()
 
     def scan_files(self, root):
         files = []

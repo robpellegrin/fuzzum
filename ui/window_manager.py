@@ -11,6 +11,7 @@ from ui.panes.details_pane import DetailsPane
 from ui.panes.preview_pane import PreviewPane
 from ui.panes.results_pane import ResultsPane
 from ui.panes.search_pane import SearchPane
+from ui.help_popup import HelpPopup
 
 
 class WindowManager:
@@ -31,6 +32,10 @@ class WindowManager:
             self.previews,
             self.details,
         ]
+
+    @property
+    def help(self):
+        return HelpPopup(self.app.stdscr)
 
     def toggle_window(self, window):
         window.toggle()
