@@ -11,9 +11,8 @@ import curses
 
 
 class HelpPopup:
-    def __init__(self, app):
-        self.app = app
-        self.stdscr = app.stdscr
+    def __init__(self, stdscr):
+        self.stdscr = stdscr
 
     def show(self):
         height, width = self.stdscr.getmaxyx()
