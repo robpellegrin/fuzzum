@@ -12,6 +12,7 @@ from ui.panes.preview_pane import PreviewPane
 from ui.panes.results_pane import ResultsPane
 from ui.panes.search_pane import SearchPane
 from ui.help_popup import HelpPopup
+import sys
 
 
 class WindowManager:
@@ -24,13 +25,13 @@ class WindowManager:
         self.details = DetailsPane(app, "details")
 
         self.right_pane = [
-            self.results,
-            self.search,
+            self.previews,
+            self.details,
         ]
 
         self.left_pane = [
-            self.previews,
-            self.details,
+            self.results,
+            self.search,
         ]
 
     @property
@@ -40,10 +41,9 @@ class WindowManager:
     def toggle_window(self, window):
         window.toggle()
 
-        window.win.clear()
-        window.win.refresh()
-
-        self.resize()
+        for left, right in zip(self.right_pane, self.left_pane):
+            left.needs_refresh = True
+            right.needs_refresh = True
 
     def create(self):
         for window in self.right_pane:
@@ -52,34 +52,37 @@ class WindowManager:
         for window in self.left_pane:
             window.create()
 
-    def refresh(self):
         self.resize()
 
-        for window in self.right_pane:
-            if window.visible is True:
-                window.refresh()
+    def refresh(self):
+        for left, right in zip(self.left_pane, self.right_pane):
+            left.refresh()
+            right.refresh()
 
-        for window in self.left_pane:
-            if window.visible is True:
-                window.refresh()
+        y, x = self.search.get_cursor_position()
+        self.app.stdscr.move(y, x)
 
     def resize(self):
         height, width = self.app.stdscr.getmaxyx()
 
-        if self.previews.visible is not True:
+        if not self.previews.visible:
+            print("PREVIEWS DISABLED", file=sys.stderr)
             self.results.resize(height - 3, width)
         else:
             self.results.resize(height - 3, width // 2)
 
-        if self.details.visible is not True:
+        if not self.details.visible:
             self.search.resize(3, width)
         else:
             self.search.resize(3, width // 2)
 
-        for window in self.right_pane:
-            if not window.visible:
-                window.win.erase()
+#        self.app.stdscr.erase()
+        #self.refresh()
 
-        for window in self.left_pane:
-            if not window.visible:
-                window.win.erase()
+#        for window in self.right_pane:
+#            if not window.visible:
+#                window.win.erase()
+#
+#        for window in self.left_pane:
+#            if not window.visible:
+#                window.win.erase()
