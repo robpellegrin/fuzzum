@@ -22,13 +22,14 @@ class ResultsPane(BaseWindow):
 
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
+
         self.files = self.app.files
 
-        self.show_filenames_only = (
-            self.app.config.get("ui", "show_filenames_only") or False
-        )
+        self.show_filenames_only = self.app.config.get(
+            "ui", "show_filenames_only") or False
 
-        self.show_hidden_files = self.app.config.get("ui", "show_hidden_files") or False
+        self.show_hidden_files = self.app.config.get(
+            "ui", "show_hidden_files") or False
 
         self._filter_files()
 
@@ -102,10 +103,9 @@ class ResultsPane(BaseWindow):
         thumb_size = max(1, int(scrollbar_height * (max_rows / total_items)))
 
         # Thumb position
-        thumb_pos = int(
-            (self.cursor / total_items)
-            * (scrollbar_height - thumb_size)
-        )+1
+        thumb_pos = (
+            int((self.cursor / total_items) * (scrollbar_height - thumb_size)) + 1
+        )
 
         for i in range(scrollbar_height):
             char = "│"
