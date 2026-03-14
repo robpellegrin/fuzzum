@@ -3,11 +3,12 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-11-2026
+@updated 03-13-2026
 
 """
 
 import curses
+import sys
 
 CTRL_KEYS = {
     "CTRL_A": 1,
@@ -28,11 +29,13 @@ class InputHandler:
         ##
         # Special keys
         ##
+
         if key == ord("q") or key == 15:
             self.app.running = False
 
         elif key == ord("?"):
             self.app.wm.help.show()
+            self.app.wm.refresh()
 
         elif key == ord("."):
             self.app.wm.results.toggle_hidden_files()
@@ -63,12 +66,14 @@ class InputHandler:
 
         elif key == CTRL_KEYS["CTRL_P"]:
             self.app.wm.toggle_window(self.app.wm.previews)
+            self.app.wm.resize()
 
         elif key == CTRL_KEYS["CTRL_D"]:
             self.app.wm.toggle_window(self.app.wm.details)
+            self.app.wm.resize()
 
         elif key == CTRL_KEYS["CTRL_U"]:
             self.app.query = ""
 
         elif 32 <= key <= 126:
-            self.app.query += chr(key)
+            self.app.wm.search.update_query(chr(key))
