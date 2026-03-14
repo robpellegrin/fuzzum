@@ -15,9 +15,6 @@ from ui.base_window import BaseWindow
 
 class SearchPane(BaseWindow):
 
-    def __init__(self, app, name):
-        super().__init__(app, name)
-
     def create(self):
         self.win = curses.newwin(3, self.width // 2, self.height - 3, 0)
         self.win.box()
