@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-11-2026
+@updated 03-13-2026
 
 """
 
@@ -13,7 +13,7 @@ from app.app import App
 
 
 def main(stdscr):
-    # stdscr.nodelay(True)
+    stdscr.nodelay(True)
     stdscr.timeout(50)
 
     curses.curs_set(1)
@@ -30,9 +30,6 @@ def main(stdscr):
         app.run()
     except KeyboardInterrupt:
         pass
-
-    # Reset terminal on exit
-    print("\033c")
 
 
 if __name__ == "__main__":
