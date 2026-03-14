@@ -7,13 +7,18 @@
 
 """
 
+import sys
+import curses
+
 
 class BaseWindow:
+
     def __init__(self, app, name: str):
         self.app = app
-        self.stdscr = app.stdscr
+
         self.win = None
         self.name = name
+        self.needs_refresh = True
 
         try:
             self.visible = self.app.config.get("panes", self.name)
@@ -22,6 +27,10 @@ class BaseWindow:
 
         self.height, self.width = self.stdscr.getmaxyx()
 
+    @property
+    def stdscr(self):
+        return self.app.stdscr
+
     def toggle(self) -> None:
         self.visible = not self.visible
         self.app.config.set(self.visible, "panes", self.name)
@@ -29,5 +38,18 @@ class BaseWindow:
     def resize(self, height, width) -> None:
         self.win.resize(height, width)
 
-    def refresh(self) -> None:
+    def draw(self):
         raise NotImplementedError
+
+    def refresh(self) -> None:
+        if self.needs_refresh is False:
+            return
+
+        if self.visible is False:
+            return
+
+        self.draw()
+        self.win.noutrefresh()
+        self.needs_refresh = False
+
+        print(f"BaseWindow Refreshing: {self.name}", file=sys.stderr)
