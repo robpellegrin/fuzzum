@@ -7,6 +7,7 @@
 
 """
 
+import sys
 import curses
 from pathlib import Path
 
@@ -18,15 +19,16 @@ class ResultsPane(BaseWindow):
 
     def __init__(self, app, name):
         super().__init__(app, name)
+
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
         self.files = self.app.files
 
-        self.show_filenames_only = self.app.config.get(
-            "ui", "show_filenames_only") or False
+        self.show_filenames_only = (
+            self.app.config.get("ui", "show_filenames_only") or False
+        )
 
-        self.show_hidden_files = self.app.config.get(
-            "ui", "show_hidden_files") or False
+        self.show_hidden_files = self.app.config.get("ui", "show_hidden_files") or False
 
         self._filter_files()
 
@@ -38,19 +40,13 @@ class ResultsPane(BaseWindow):
             0, 1, f" Results —— ({results_count:,d}) ", curses.color_pair(3)
         )
 
-    def refresh(self):
+    def draw(self):
         self.win.erase()
         self.win.box()
         self.header(len(self.files))
 
-        self.h, self.w = self.win.getmaxyx()
-
-        if not self.app.files:
-            return
-
         self._draw_files()
         self._draw_scrollbar()
-        self.win.noutrefresh()
         self.app.cursor = self.cursor
 
     def _filter_files(self) -> None:
@@ -65,61 +61,78 @@ class ResultsPane(BaseWindow):
 
     def toggle_filenames(self) -> None:
         self.show_filenames_only = not self.show_filenames_only
-        self.app.config.set(
-            self.show_filenames_only, "ui", "show_filenames_only"
-        )
         self._filter_files()
+        self.needs_refresh = True
 
     def toggle_hidden_files(self) -> None:
         self.show_hidden_files = not self.show_hidden_files
-        self.app.config.set(self.show_hidden_files, "ui", "show_hidden_files")
         self._filter_files()
+        self.needs_refresh = True
 
     def _draw_files(self):
-        max_rows = self.h - 2
+        max_rows = self.height - 5
         # leave 1 col for scrollbar!
-        max_width = self.w - 3
+        max_width = self.width - 18
 
-        visible = self.files[self.offset: self.offset + max_rows]
-
+        visible = self.files[self.offset : self.offset + max_rows]
+        print(f"{visible}", file=sys.stderr)
         for i, file in enumerate(visible):
             row = i + 1
             text = file[:max_width]
 
             try:
                 if self.offset + i == self.cursor:
-                    self.win.addstr(row, 1, text, curses.A_REVERSE)
+                    self.win.addstr(row, 2, text, curses.A_REVERSE)
                 else:
-                    self.win.addstr(row, 1, text)
+                    self.win.addstr(row, 2, text)
             except curses.error:
                 pass
 
     def _draw_scrollbar(self):
-        max_rows = self.h - 2
+        max_rows = self.height - 5
+        total_items = len(self.files)
 
-        # draw vertical scrollbar if needed
-        total_items = len(self.app.files)
-        if total_items > max_rows:
-            scroll_height = max(1, int(max_rows * max_rows / total_items))
-            scroll_start = int(self.offset * max_rows / total_items)
-            for i in range(scroll_height):
-                try:
-                    self.win.addstr(1 + scroll_start, self.w - 2, "█")
-                except curses.error:
-                    pass
+        if total_items <= max_rows:
+            return
+
+        scrollbar_x = self.width - 2
+        scrollbar_height = max_rows
+
+        # Thumb size
+        thumb_size = max(1, int(scrollbar_height * (max_rows / total_items)))
+
+        # Thumb position
+        thumb_pos = int(
+            (self.cursor / total_items)
+            * (scrollbar_height - thumb_size)
+        )+1
+
+        for i in range(scrollbar_height):
+            char = "│"
+
+            if thumb_pos <= i < thumb_pos + thumb_size:
+                char = "█"
+
+            try:
+                self.win.addstr(i + 1, scrollbar_x, char)
+            except curses.error:
+                pass
 
     ##
     # Scrolling
     ##
     def move_down(self):
-        if self.cursor < len(self.app.files) - 1:
+        if 0 <= self.cursor < len(self.files) - 1:
+            print("MOVING DOWN", file=sys.stderr)
             self.cursor += 1
-        self._adjust_offset()
+            self._adjust_offset()
+            self.needs_refresh = True
 
     def move_up(self):
-        if self.cursor > 0:
+        if 0 < self.cursor <= len(self.files):
+            self.needs_refresh = True
             self.cursor -= 1
-        self._adjust_offset()
+            self._adjust_offset()
 
     def page_down(self):
         page = self.win.getmaxyx()[0] - 2
