@@ -15,18 +15,16 @@ from ui.base_window import BaseWindow
 
 
 class DetailsPane(BaseWindow):
+
     def create(self):
         self.win = curses.newwin(
             3, self.width // 2, self.height - 3, self.width // 2
         )
 
-    def refresh(self):
-        self.win.erase()
+    def draw(self):
         self.win.box()
         self.win.addstr(0, 2, " Details ", curses.color_pair(3))
-
         self._stat_file()
-        self.win.noutrefresh()
 
     def _stat_file(self):
         info = os.stat(self.app.files[self.app.cursor])
@@ -43,3 +41,5 @@ class DetailsPane(BaseWindow):
         perms = oct(info.st_mode & 0o777)
 
         self.win.addstr(1, 2, f"{size} {mtime} {perms}")
+
+        self.needs_refresh = True
