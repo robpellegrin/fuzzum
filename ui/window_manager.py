@@ -9,8 +9,7 @@
 
 import logging
 import sys
-
-from app.app import App
+from typing import TYPE_CHECKING
 from ui.base_window import BaseWindow
 from ui.help_popup import HelpPopup
 from ui.panes.details_pane import DetailsPane
@@ -18,11 +17,14 @@ from ui.panes.preview_pane import PreviewPane
 from ui.panes.results_pane import ResultsPane
 from ui.panes.search_pane import SearchPane
 
+if TYPE_CHECKING:
+    from app.app import App
+
 logger = logging.getLogger(__name__)
 
 
 class WindowManager:
-    def __init__(self, app: App):
+    def __init__(self, app: "App"):
         self.app = app
 
         self.results = ResultsPane(app, "results")
