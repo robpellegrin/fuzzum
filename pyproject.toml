@@ -1,0 +1,42 @@
+##
+# @file:    pyproject.toml
+# @author:  Rob Pellegrin
+# @date:    03-14-2026
+#
+# @updated: 03-14-2026
+#
+##
+
+[tool.mypy]
+# Configure the directories and files to be analyzed by mypy.
+files = "app, ui, utils, main.py"
+
+# Enable strict type checking (enforces more thorough type checks).
+strict = true
+
+# Ensure that functions and methods have type hints.
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+
+# Prevent functions from returning without type hints.
+disallow_incomplete_defs = true
+
+# Ensure that no untyped variables are used.
+check_untyped_defs = true
+
+# Ignore missing imports in type checks (useful if you have external libraries)
+# If you have missing modules (e.g., circular imports), this will prevent errors.
+# If you want mypy to flag missing imports, set this to false.
+ignore_missing_imports = true
+
+# If you are using forward references, this helps resolve them correctly
+# (recommended if using string-based type hints for forward references).
+disallow_untyped_decorators = true
+
+# Show warnings for unused 'type: ignore' comments, if present.
+warn_unused_ignores = true
+
+# Use this if you want to specify additional directories for type-checking.
+# This could be useful if your project has custom or third-party dependencies.
+# you might want to add `venv` or `env` folders here if they exist
+# exclude = ["venv", "__pycache__", "env"]
