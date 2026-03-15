@@ -45,7 +45,7 @@ class BaseWindow:
     def stdscr(self) -> curses.window:
         return self.app.stdscr
 
-    def toggle(self) -> None:
+    def toggle_visibility(self) -> None:
         self.visible = not self.visible
         self.app.config.set(self.visible, "panes", self.name)
 
