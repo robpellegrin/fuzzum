@@ -20,20 +20,19 @@ from utils.input_handler import InputHandler
 class App:
     def __init__(self, stdscr: curses.window) -> None:
         root = sys.argv[1] if len(sys.argv) > 1 else "."
+
         self.files = self.scan_files(root)
         self.stdscr = stdscr
         self.query = ""
 
         self.input = InputHandler(self)
 
+        self.config = Config()
+
         self.wm = WindowManager(self)
         self.wm.create()
 
         self.cursor = 0
-
-    @property
-    def config(self) -> Config:
-        return Config()
 
     def run(self) -> None:
         self.running = True
