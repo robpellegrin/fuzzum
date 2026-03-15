@@ -3,7 +3,12 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-14-2026
+TODO:
+    - Make output more attractive.
+        + Human readable file sizes
+        + Colors?
+
+@updated 03-15-2026
 
 """
 

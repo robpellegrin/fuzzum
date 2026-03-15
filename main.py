@@ -3,7 +3,13 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-13-2026
+
+TODO:
+    - Add argparse for CLI args to call
+        `find .  -type f -name *.py | xargs -P 10 grep "Rob"`.
+
+
+@updated 03-14-2026
 
 """
 
