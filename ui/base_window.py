@@ -7,6 +7,7 @@
 
 """
 
+import curses
 import logging
 
 logger = logging.getLogger(__name__)
@@ -14,12 +15,19 @@ logger = logging.getLogger(__name__)
 
 class BaseWindow:
 
+    name: str
+    needs_refresh: bool
+    visible: bool
+
+    height: int
+    width: int
+    win: curses.window
+
     def __init__(self, app, name: str):
         self.app = app
 
-        self.win = None
-        self.name = name
         self.needs_refresh = True
+        self.name = name
 
         try:
             self.visible = self.app.config.get("panes", self.name)
@@ -29,17 +37,17 @@ class BaseWindow:
         self.height, self.width = self.stdscr.getmaxyx()
 
     @property
-    def stdscr(self):
+    def stdscr(self) -> curses.window:
         return self.app.stdscr
 
     def toggle(self) -> None:
         self.visible = not self.visible
         self.app.config.set(self.visible, "panes", self.name)
 
-    def resize(self, height, width) -> None:
+    def resize(self, height: int, width: int) -> None:
         self.win.resize(height, width)
 
-    def draw(self):
+    def draw(self) -> NotImplementedError:
         raise NotImplementedError
 
     def refresh(self) -> None:
