@@ -7,9 +7,17 @@
 
 """
 
+import logging
 import curses
 
 from app.app import App
+
+# Enable logging
+logging.basicConfig(
+    filename="app.log",
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 
 
 def main(stdscr):
