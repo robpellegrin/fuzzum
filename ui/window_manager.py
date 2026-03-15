@@ -28,45 +28,41 @@ class WindowManager:
     def __init__(self, app: "App"):
         self.app = app
 
-        self.results = ResultsPane(app, "results")
-        self.previews = PreviewPane(app, "preview")
-        self.search = SearchPane(app, "search")
         self.details = DetailsPane(app, "details")
+        self.previews = PreviewPane(app, "preview")
+        self.results = ResultsPane(app, "results")
+        self.search = SearchPane(app, "search")
 
-        self.right_pane = [
-            self.previews,
+        self.window_list = [
             self.details,
-        ]
-
-        self.left_pane = [
+            self.previews,
             self.results,
             self.search,
         ]
+
+    def __iter__(self) -> list[BaseWindow]:
+        for window in self.window_list:
+            yield window
 
     @property
     def help(self) -> HelpPopup:
         return HelpPopup(self.app.stdscr)
 
     def toggle_window(self, window: BaseWindow) -> None:
-        window.toggle()
+        window.toggle_visibility()
 
-        for left, right in zip(self.right_pane, self.left_pane):
-            left.needs_refresh = True
-            right.needs_refresh = True
+        for window in self:
+            window.needs_refresh = True
 
     def create(self) -> None:
-        for window in self.right_pane:
-            window.create()
-
-        for window in self.left_pane:
+        for window in self:
             window.create()
 
         self.resize()
 
     def refresh(self) -> None:
-        for left, right in zip(self.left_pane, self.right_pane):
-            left.refresh()
-            right.refresh()
+        for window in self:
+            window.refresh()
 
         y, x = self.search.get_cursor_position()
         self.app.stdscr.move(y, x)
@@ -75,7 +71,6 @@ class WindowManager:
         height, width = self.app.stdscr.getmaxyx()
 
         if not self.previews.visible:
-            print("PREVIEWS DISABLED", file=sys.stderr)
             self.results.resize(height - 3, width)
         else:
             self.results.resize(height - 3, width // 2)
