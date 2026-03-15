@@ -50,6 +50,9 @@ class BaseWindow:
     def draw(self) -> None:
         raise NotImplementedError
 
+    def create(self) -> None:
+        raise NotImplementedError
+
     def refresh(self) -> None:
         if self.needs_refresh is False:
             return
