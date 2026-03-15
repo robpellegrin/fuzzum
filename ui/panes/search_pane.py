@@ -16,10 +16,17 @@ class SearchPane(BaseWindow):
 
     def create(self) -> None:
         self.win = curses.newwin(3, self.width // 2, self.height - 3, 0)
-        self.win.box()
 
     def draw(self) -> None:
+        # Clear search querybefore calling box() so box draws correctly.
+        self.win.move(1, 2)
+        self.win.clrtoeol()
+
+        # Draw search pane
+        self.win.box()
         self.win.addstr(0, 2, " Search ", curses.color_pair(3))
+
+        # Write query text.
         self.win.addstr(1, 2, "> " + self.app.query, curses.color_pair(1))
         self.stdscr.move(self.height - 2, 4 + len(self.app.query))
 
