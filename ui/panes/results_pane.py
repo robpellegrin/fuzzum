@@ -3,45 +3,53 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-11-2026
+@updated 03-14-2026
 
 """
 
-import sys
 import curses
+import logging
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ui.base_window import BaseWindow
+
+if TYPE_CHECKING:
+    from app.app import App
+
+logger = logging.getLogger(__name__)
 
 
 class ResultsPane(BaseWindow):
     """Scrollable results pane with highlight and vertical scrollbar."""
 
-    def __init__(self, app, name):
+    def __init__(self, app: "App", name: str) -> None:
         super().__init__(app, name)
 
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
 
-        self.files = self.app.files
+        self.files: list[str] = self.app.files
 
-        self.show_filenames_only = self.app.config.get(
-            "ui", "show_filenames_only") or False
+        self.show_filenames_only: bool = (
+            self.app.config.get("ui", "show_filenames_only") or False
+        )
 
-        self.show_hidden_files = self.app.config.get(
-            "ui", "show_hidden_files") or False
+        self.show_hidden_files: bool = (
+            self.app.config.get("ui", "show_hidden_files") or False
+        )
 
         self._filter_files()
 
-    def create(self):
+    def create(self) -> None:
         self.win = curses.newwin(self.height - 3, self.width // 2, 0, 0)
 
-    def header(self, results_count=0):
+    def header(self, results_count: int = 0) -> None:
         self.win.addstr(
             0, 1, f" Results —— ({results_count:,d}) ", curses.color_pair(3)
         )
 
-    def draw(self):
+    def draw(self) -> None:
         self.win.erase()
         self.win.box()
         self.header(len(self.files))
@@ -57,7 +65,7 @@ class ResultsPane(BaseWindow):
             if self.show_hidden_files or not self._is_hidden_path(f)
         ]
 
-    def _is_hidden_path(self, path: str):
+    def _is_hidden_path(self, path: str) -> bool:
         return any(part.startswith(".") for part in path.split("/"))
 
     def toggle_filenames(self) -> None:
@@ -70,13 +78,12 @@ class ResultsPane(BaseWindow):
         self._filter_files()
         self.needs_refresh = True
 
-    def _draw_files(self):
+    def _draw_files(self) -> None:
         max_rows = self.height - 5
-        # leave 1 col for scrollbar!
         max_width = self.width - 18
 
-        visible = self.files[self.offset : self.offset + max_rows]
-        print(f"{visible}", file=sys.stderr)
+        visible = self.files[self.offset: self.offset + max_rows]
+
         for i, file in enumerate(visible):
             row = i + 1
             text = file[:max_width]
@@ -89,7 +96,7 @@ class ResultsPane(BaseWindow):
             except curses.error:
                 pass
 
-    def _draw_scrollbar(self):
+    def _draw_scrollbar(self) -> None:
         max_rows = self.height - 5
         total_items = len(self.files)
 
@@ -104,7 +111,10 @@ class ResultsPane(BaseWindow):
 
         # Thumb position
         thumb_pos = (
-            int((self.cursor / total_items) * (scrollbar_height - thumb_size)) + 1
+            int(
+                (self.cursor / total_items)
+                * (scrollbar_height - thumb_size))
+            + 1
         )
 
         for i in range(scrollbar_height):
@@ -121,40 +131,41 @@ class ResultsPane(BaseWindow):
     ##
     # Scrolling
     ##
-    def move_down(self):
+    def move_down(self) -> None:
         if 0 <= self.cursor < len(self.files) - 1:
-            print("MOVING DOWN", file=sys.stderr)
             self.cursor += 1
             self._adjust_offset()
             self.needs_refresh = True
 
-    def move_up(self):
+    def move_up(self) -> None:
         if 0 < self.cursor <= len(self.files):
             self.needs_refresh = True
             self.cursor -= 1
             self._adjust_offset()
 
-    def page_down(self):
+    def page_down(self) -> None:
         page = self.win.getmaxyx()[0] - 2
         self.cursor = min(len(self.app.files) - 1, self.cursor + page)
         self._adjust_offset()
 
-    def page_up(self):
+    def page_up(self) -> None:
         page = self.win.getmaxyx()[0] - 2
         self.cursor = max(0, self.cursor - page)
         self._adjust_offset()
 
-    def go_top(self):
+    def go_top(self) -> None:
         self.cursor = 0
         self._adjust_offset()
 
-    def go_bottom(self):
+    def go_bottom(self) -> None:
         self.cursor = len(self.app.files) - 1
         self._adjust_offset()
 
-    def _adjust_offset(self):
+    def _adjust_offset(self) -> None:
         """Adjust the top-of-window offset to keep the cursor visible."""
+
         h = self.win.getmaxyx()[0] - 2
+
         if self.cursor < self.offset:
             self.offset = self.cursor
         elif self.cursor >= self.offset + h:
