@@ -41,6 +41,9 @@ class ResultsPane(BaseWindow):
 
         self._filter_files()
 
+    def get_selected_file(self) -> str:
+        return self.files[self.cursor]
+
     def create(self) -> None:
         self.win = curses.newwin(self.height - 3, self.width // 2, 0, 0)
 
