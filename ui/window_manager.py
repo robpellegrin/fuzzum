@@ -3,20 +3,26 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-11-2026
+@updated 03-14-2026
 
 """
 
+import logging
+import sys
+
+from app.app import App
+from ui.base_window import BaseWindow
+from ui.help_popup import HelpPopup
 from ui.panes.details_pane import DetailsPane
 from ui.panes.preview_pane import PreviewPane
 from ui.panes.results_pane import ResultsPane
 from ui.panes.search_pane import SearchPane
-from ui.help_popup import HelpPopup
-import sys
+
+logger = logging.getLogger(__name__)
 
 
 class WindowManager:
-    def __init__(self, app):
+    def __init__(self, app: App):
         self.app = app
 
         self.results = ResultsPane(app, "results")
@@ -35,17 +41,17 @@ class WindowManager:
         ]
 
     @property
-    def help(self):
+    def help(self) -> HelpPopup:
         return HelpPopup(self.app.stdscr)
 
-    def toggle_window(self, window):
+    def toggle_window(self, window: BaseWindow) -> None:
         window.toggle()
 
         for left, right in zip(self.right_pane, self.left_pane):
             left.needs_refresh = True
             right.needs_refresh = True
 
-    def create(self):
+    def create(self) -> None:
         for window in self.right_pane:
             window.create()
 
@@ -54,7 +60,7 @@ class WindowManager:
 
         self.resize()
 
-    def refresh(self):
+    def refresh(self) -> None:
         for left, right in zip(self.left_pane, self.right_pane):
             left.refresh()
             right.refresh()
@@ -62,7 +68,7 @@ class WindowManager:
         y, x = self.search.get_cursor_position()
         self.app.stdscr.move(y, x)
 
-    def resize(self):
+    def resize(self) -> None:
         height, width = self.app.stdscr.getmaxyx()
 
         if not self.previews.visible:
@@ -75,14 +81,3 @@ class WindowManager:
             self.search.resize(3, width)
         else:
             self.search.resize(3, width // 2)
-
-#        self.app.stdscr.erase()
-        #self.refresh()
-
-#        for window in self.right_pane:
-#            if not window.visible:
-#                window.win.erase()
-#
-#        for window in self.left_pane:
-#            if not window.visible:
-#                window.win.erase()
