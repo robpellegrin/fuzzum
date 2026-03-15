@@ -15,12 +15,12 @@ from app.app import App
 # Enable logging
 logging.basicConfig(
     filename="app.log",
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 
 
-def main(stdscr):
+def main(stdscr: curses.window) -> None:
     stdscr.nodelay(True)
     stdscr.timeout(50)
 
