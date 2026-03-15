@@ -3,12 +3,15 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-13-2026
+@updated 03-14-2026
 
 """
 
 import curses
-import sys
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.app import App
 
 CTRL_KEYS = {
     "CTRL_A": 1,
@@ -22,10 +25,10 @@ CTRL_KEYS = {
 
 
 class InputHandler:
-    def __init__(self, app):
+    def __init__(self, app: "App"):
         self.app = app
 
-    def handle(self, key):
+    def handle(self, key: int) -> None:
         ##
         # Special keys
         ##
