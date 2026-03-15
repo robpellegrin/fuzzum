@@ -47,7 +47,7 @@ class BaseWindow:
     def resize(self, height: int, width: int) -> None:
         self.win.resize(height, width)
 
-    def draw(self) -> NotImplementedError:
+    def draw(self) -> None:
         raise NotImplementedError
 
     def refresh(self) -> None:
