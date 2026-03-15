@@ -48,6 +48,7 @@ class InputHandler:
 
         elif key == curses.KEY_BACKSPACE:
             self.app.query = self.app.query[:-1]
+            self.app.wm.search.needs_refresh = True
 
         ##
         # Navigation
