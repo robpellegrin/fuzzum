@@ -9,6 +9,11 @@
 
 import curses
 import logging
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.app import App
+
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +28,7 @@ class BaseWindow:
     width: int
     win: curses.window
 
-    def __init__(self, app, name: str):
+    def __init__(self, app: "App", name: str):
         self.app = app
 
         self.needs_refresh = True
