@@ -33,7 +33,14 @@ class DetailsPane(BaseWindow):
         self.win.addstr(1, 2, details_str)
 
     def _stat_file(self) -> str:
-        selected_file: str = self.app.files[self.app.cursor]
+        """
+        Gathers file metadata (size, last modified, etc) for a given
+        file.
+
+        """
+
+        selected_file = self.app.wm.results.get_selected_file()
+
         info: os.stat_result = os.stat(selected_file)
 
         # File size in bytes
