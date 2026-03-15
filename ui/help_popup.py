@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-11-2026
+@updated 03-14-2026
 
 """
 
@@ -11,12 +11,10 @@ import curses
 
 
 class HelpPopup:
-    def __init__(self, stdscr):
+    def __init__(self, stdscr: curses.window) -> None:
         self.stdscr = stdscr
 
-    def show(self):
-        height, width = self.stdscr.getmaxyx()
-
+    def show(self) -> None:
         sh, sw = self.stdscr.getmaxyx()
 
         win_h = 15
