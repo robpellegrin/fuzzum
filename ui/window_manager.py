@@ -10,6 +10,7 @@
 import logging
 import sys
 from typing import TYPE_CHECKING
+
 from ui.base_window import BaseWindow
 from ui.help_popup import HelpPopup
 from ui.panes.details_pane import DetailsPane
