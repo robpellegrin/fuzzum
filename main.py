@@ -7,8 +7,8 @@
 
 """
 
-import logging
 import curses
+import logging
 
 from app.app import App
 
