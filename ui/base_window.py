@@ -3,12 +3,13 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-11-2026
+@updated 03-14-2026
 
 """
 
-import sys
-import curses
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BaseWindow:
@@ -52,4 +53,4 @@ class BaseWindow:
         self.win.noutrefresh()
         self.needs_refresh = False
 
-        print(f"BaseWindow Refreshing: {self.name}", file=sys.stderr)
+        logging.info("Refreshed %s", self.name)
