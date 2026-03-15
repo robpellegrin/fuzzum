@@ -46,7 +46,12 @@ class DetailsPane(BaseWindow):
 
         selected_file = self.app.wm.results.get_selected_file()
 
-        info: os.stat_result = os.stat(selected_file)
+        try:
+            info: os.stat_result = os.stat(selected_file)
+        except FileNotFoundError:
+            return "File not found!"
+        except PermissionError:
+            return "Permission Error!"
 
         # File size in bytes
         size: int = info.st_size
