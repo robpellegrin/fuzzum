@@ -48,7 +48,7 @@ class WindowManager:
         ]
 
     def __iter__(self) -> Generator[BaseWindow]:
-        yield self.window_list
+        yield from self.window_list
 
     @property
     def help(self) -> HelpPopup:
