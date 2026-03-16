@@ -35,4 +35,4 @@ class SearchPane(BaseWindow):
         self.needs_refresh = True
 
     def get_cursor_position(self) -> tuple[int, int]:
-        return (self.height - 2, 4 + len(self.app.query))
+        return (self.base_height - 2, 4 + len(self.app.query))
