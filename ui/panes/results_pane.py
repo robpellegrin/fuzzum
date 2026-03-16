@@ -49,6 +49,9 @@ class ResultsPane(BaseWindow):
 
         self._draw_files()
         self._draw_scrollbar()
+
+        self.cursor = min(self.cursor, len(self.files) - 1)
+        self.cursor = max(self.cursor, 0)
         self.app.cursor = self.cursor
 
     def toggle_filenames(self) -> None:
@@ -107,8 +110,8 @@ class ResultsPane(BaseWindow):
 
             try:
                 self.win.addstr(i + 1, scrollbar_x, char)
-            except curses.error:
-                pass
+            except curses.error as e:
+                logger.error("%s", e)
 
     ##
     # Scrolling
@@ -117,20 +120,24 @@ class ResultsPane(BaseWindow):
         if 0 <= self.cursor < len(self.files) - 1:
             self.cursor += 1
             self._adjust_offset()
-            self.needs_refresh = True
 
     def move_up(self) -> None:
         if 0 < self.cursor <= len(self.files):
-            self.needs_refresh = True
             self.cursor -= 1
             self._adjust_offset()
 
     def page_down(self) -> None:
+        if self.cursor == len(self.files) - 1:
+            return
+
         page = self.win.getmaxyx()[0] - 2
-        self.cursor = min(len(self.app.files) - 1, self.cursor + page)
+        self.cursor = min(len(self.files) - 1, self.cursor + page)
         self._adjust_offset()
 
     def page_up(self) -> None:
+        if self.cursor == 0:
+            return
+
         page = self.win.getmaxyx()[0] - 2
         self.cursor = max(0, self.cursor - page)
         self._adjust_offset()
@@ -140,15 +147,18 @@ class ResultsPane(BaseWindow):
         self._adjust_offset()
 
     def go_bottom(self) -> None:
-        self.cursor = len(self.app.files) - 1
+        self.cursor = len(self.files) - 1
         self._adjust_offset()
 
     def _adjust_offset(self) -> None:
         """Adjust the top-of-window offset to keep the cursor visible."""
 
-        h = self.win.getmaxyx()[0] - 2
+        height = self.win.getmaxyx()[0] - 2
 
         if self.cursor < self.offset:
             self.offset = self.cursor
-        elif self.cursor >= self.offset + h:
-            self.offset = self.cursor - h + 1
+
+        elif self.cursor >= self.offset + height:
+            self.offset = self.cursor - height + 1
+
+        self.needs_refresh = True
