@@ -30,6 +30,7 @@ class DetailsPane(BaseWindow):
         )
 
     def draw(self) -> None:
+        self.win.erase()
         self.win.box()
         self.win.addstr(0, 2, " Details ", curses.color_pair(3))
 
