@@ -58,11 +58,8 @@ class BaseWindow:
     def create(self) -> None:
         raise NotImplementedError
 
-    def refresh(self) -> None:
-        if self.needs_refresh is False:
-            return
-
-        if self.visible is False:
+    def refresh_window(self) -> None:
+        if not self.needs_refresh or not self.visible:
             return
 
         self.draw()
