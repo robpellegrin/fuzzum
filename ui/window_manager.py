@@ -3,12 +3,12 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-14-2026
+@updated 03-16-2026
 
 """
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generator
 
 from ui.base_window import BaseWindow
 from ui.help_popup import HelpPopup
@@ -32,11 +32,11 @@ class WindowManager:
         self.results = ResultsPane(app, "results")
         self.search = SearchPane(app, "search")
 
-        self.details.visible: bool = (
+        self.details.visible = (
             self.app.config.get("panes", "details") or False
         )
 
-        self.previews.visible: bool = (
+        self.previews.visible = (
             self.app.config.get("panes", "preview") or False
         )
 
@@ -47,9 +47,8 @@ class WindowManager:
             self.search,
         ]
 
-    def __iter__(self) -> list[BaseWindow]:
-        for window in self.window_list:
-            yield window
+    def __iter__(self) -> Generator[BaseWindow]:
+        yield self.window_list
 
     @property
     def help(self) -> HelpPopup:
@@ -58,8 +57,8 @@ class WindowManager:
     def toggle_window(self, window: BaseWindow) -> None:
         window.toggle_visibility()
 
-        for window in self:
-            window.needs_refresh = True
+        for pane in self:
+            pane.needs_refresh = True
 
         self.resize()
 
@@ -102,12 +101,12 @@ class WindowManager:
         if not self.details.visible:
             return
 
-        height, width = self.app.stdscr.getmaxyx()
+        _, width = self.app.stdscr.getmaxyx()
 
         self.details.resize(3, width // 2)
 
     def _resize_search(self) -> None:
-        height, width = self.app.stdscr.getmaxyx()
+        _, width = self.app.stdscr.getmaxyx()
 
         if self.details.visible:
             width //= 2
