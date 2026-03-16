@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-15-2026
+@updated 03-16-2026
 
 """
 
@@ -63,13 +63,17 @@ class ResultsPane(BaseWindow):
         self.needs_refresh = True
 
     def _draw_files(self) -> None:
-        max_rows = self.height - 5
-        max_width = self.width - 18
+        max_rows = self.height - 2
+        max_width = self.width - 5
 
         visible = self.files[self.offset: self.offset + max_rows]
 
         for i, file in enumerate(visible):
-            file = str(file)
+            if self.files.show_filename_only:
+                file = file.name
+            else:
+                file = str(file)
+
             row = i + 1
             text = file[:max_width]
 
@@ -78,11 +82,12 @@ class ResultsPane(BaseWindow):
                     self.win.addstr(row, 2, text, curses.A_REVERSE)
                 else:
                     self.win.addstr(row, 2, text)
-            except curses.error:
+            except curses.error as e:
+                logging.error("_draw_files: %s", e)
                 pass
 
     def _draw_scrollbar(self) -> None:
-        max_rows = self.height - 5
+        max_rows = self.height - 3
         total_items = len(self.files)
 
         if total_items <= max_rows:
@@ -111,7 +116,7 @@ class ResultsPane(BaseWindow):
             try:
                 self.win.addstr(i + 1, scrollbar_x, char)
             except curses.error as e:
-                logger.error("%s", e)
+                logger.error("_draw_scrollbar: %s", e)
 
     ##
     # Scrolling
