@@ -1,4 +1,7 @@
 """
+@file:    app.py
+@author:  Rob Pellegrin
+@date:    03-11-2026
 
 TODO
     - Finish metadata.
@@ -6,15 +9,20 @@ TODO
     - File previews.
     - If len(query) > 1 and len(results) < 1, make query text red.
 
+@updated: 03-16-2026
+
 """
 
 import curses
-import os
+import logging
 import sys
+from pathlib import Path
 
 from ui.window_manager import WindowManager
 from utils.config import Config
 from utils.input_handler import InputHandler
+
+logging.getLogger(__name__)
 
 
 class App:
@@ -35,9 +43,7 @@ class App:
         self.cursor = 0
 
     def run(self) -> None:
-        self.running = True
-
-        while self.running:
+        while True:
             start_cursor = self.cursor
 
             key = self.stdscr.getch()
@@ -53,26 +59,26 @@ class App:
 
         self.config.save()
 
-    def scan_files(self, root: str) -> list[str]:
-        files: list[str] = []
+    def scan_files(self, root: str) -> list[Path]:
+        files: list[Path] = []
 
-        with os.scandir(root) as entries:
-            for entry in entries:
-                # Skip cache files to prevent appearance of
-                # lots of garbage files.
-                if "cache" in entry.path.lower():
-                    continue
+        # Convert root to a Path object
+        root_path = Path(root)
 
-                try:
-                    # Remove leading "./" before appending.
-                    if entry.is_file():
-                        files.append(entry.path.removeprefix("./"))
-                    elif entry.is_dir():
-                        files.extend(self.scan_files(entry.path))
-                except PermissionError:
-                    pass
+        # Using Path.rglob to walk through the directory
+        # Use rglob to traverse through all files and directories
+        # Skip cache files to prevent lots of garbage files.
+        for entry in root_path.rglob("*"):
+            if "cache" in str(entry).lower():
+                continue
+
+            try:
+                if entry.is_file():
+                    files.append(entry)  # Append the Path object directly
+            except PermissionError:
+                pass
 
         if len(files) > 1:
             files.sort()
 
-        return files
+        return files  # Ensure to return the list of Path objects
