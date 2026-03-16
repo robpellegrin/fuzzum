@@ -76,9 +76,18 @@ class ResultsPane(BaseWindow):
         self._filter_files()
         self.needs_refresh = True
 
+        self.app.config.set(
+            self.show_filenames_only, "ui", "show_filenames_only"
+        )
+
     def toggle_hidden_files(self) -> None:
         self.show_hidden_files = not self.show_hidden_files
         self._filter_files()
+
+        self.app.config.set(
+            self.show_filenames_only, "ui", "show_hidden_files"
+        )
+
         self.needs_refresh = True
 
     def _draw_files(self) -> None:
