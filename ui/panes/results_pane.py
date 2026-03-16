@@ -3,16 +3,16 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-14-2026
+@updated 03-15-2026
 
 """
 
 import curses
 import logging
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from ui.base_window import BaseWindow
+from utils.file_filter import FileFilter
 
 if TYPE_CHECKING:
     from app.app import App
@@ -29,7 +29,7 @@ class ResultsPane(BaseWindow):
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
 
-        self.files: list[str] = self.app.files
+        self.files = FileFilter(self.app.files)
 
         self.show_filenames_only: bool = (
             self.app.config.get("ui", "show_filenames_only") or False
@@ -38,8 +38,6 @@ class ResultsPane(BaseWindow):
         self.show_hidden_files: bool = (
             self.app.config.get("ui", "show_hidden_files") or False
         )
-
-        self._filter_files()
 
     def get_selected_file(self) -> str:
         return self.files[self.cursor]
@@ -61,19 +59,9 @@ class ResultsPane(BaseWindow):
         self._draw_scrollbar()
         self.app.cursor = self.cursor
 
-    def _filter_files(self) -> None:
-        self.files = [
-            Path(f).name if self.show_filenames_only else f
-            for f in self.app.files
-            if self.show_hidden_files or not self._is_hidden_path(f)
-        ]
-
-    def _is_hidden_path(self, path: str) -> bool:
-        return any(part.startswith(".") for part in path.split("/"))
-
     def toggle_filenames(self) -> None:
         self.show_filenames_only = not self.show_filenames_only
-        self._filter_files()
+        self.files.filter()
         self.needs_refresh = True
 
         self.app.config.set(
@@ -81,11 +69,10 @@ class ResultsPane(BaseWindow):
         )
 
     def toggle_hidden_files(self) -> None:
-        self.show_hidden_files = not self.show_hidden_files
-        self._filter_files()
+        state = self.files.toggle_hidden
 
         self.app.config.set(
-            self.show_filenames_only, "ui", "show_hidden_files"
+            state, "ui", "show_hidden_files"
         )
 
         self.needs_refresh = True
@@ -97,6 +84,7 @@ class ResultsPane(BaseWindow):
         visible = self.files[self.offset: self.offset + max_rows]
 
         for i, file in enumerate(visible):
+            file = str(file)
             row = i + 1
             text = file[:max_width]
 
