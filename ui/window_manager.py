@@ -8,7 +8,6 @@
 """
 
 import logging
-import sys
 from typing import TYPE_CHECKING
 
 from ui.base_window import BaseWindow
@@ -62,7 +61,7 @@ class WindowManager:
 
     def refresh(self) -> None:
         for window in self:
-            window.refresh()
+            window.refresh_window()
 
         y, x = self.search.get_cursor_position()
         self.app.stdscr.move(y, x)
@@ -79,3 +78,6 @@ class WindowManager:
             self.search.resize(3, width)
         else:
             self.search.resize(3, width // 2)
+
+        for window in self:
+            window.needs_refresh = True
