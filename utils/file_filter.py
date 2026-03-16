@@ -3,12 +3,17 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-15-2026
+@updated 03-16-2026
 
 """
 
+import logging
 from pathlib import Path
+from typing import Optional
+
 from utils.config import Config
+
+logger = logging.getLogger(__name__)
 
 
 class FileFilter:
@@ -18,11 +23,11 @@ class FileFilter:
 
         self.config = config
 
-        self._show_hidden_files = config.get(
+        self._show_hidden_files: bool = config.get(
             "file_filter", "show_hidden_files"
         )
 
-        self._show_filename_only = config.get(
+        self._show_filename_only: bool = config.get(
             "file_filter", "show_filename_only"
         )
 
@@ -48,7 +53,7 @@ class FileFilter:
         self.config.set(new_state, "file_filter", "show_hidden_files")
 
     @property
-    def show_filename_only(self) -> None:
+    def show_filename_only(self) -> bool:
         return self._show_filename_only
 
     @show_filename_only.setter
@@ -58,10 +63,10 @@ class FileFilter:
 
         self.config.set(new_state, "file_filter", "show_filename_only")
 
-    def _is_hidden_file(self, path):
+    def _is_hidden_file(self, path: Path) -> bool:
         return any(part.startswith(".") for part in Path(path).parts)
 
-    def filter(self, filter_pattern: str | None = None):
+    def filter(self, filter_pattern: Optional[str] = None) -> None:
         filtered_files = []
 
         for f in self._files:
@@ -70,7 +75,7 @@ class FileFilter:
                 continue
 
             # Skip files that don't contain pattern.
-            if filter_pattern and filter_pattern in f:
+            if filter_pattern and filter_pattern in str(f):
                 continue
 
             if self.show_filename_only:
