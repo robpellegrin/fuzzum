@@ -67,7 +67,7 @@ class FileFilter:
         return any(part.startswith(".") for part in Path(path).parts)
 
     def filter(self, filter_pattern: Optional[str] = None) -> None:
-        filtered_files = []
+        filtered_files: list[Path] = []
 
         for f in self._files:
             # Skip hidden files.
@@ -75,11 +75,8 @@ class FileFilter:
                 continue
 
             # Skip files that don't contain pattern.
-            if filter_pattern and filter_pattern in str(f):
+            if filter_pattern and filter_pattern in f.parts:
                 continue
-
-            if self.show_filename_only:
-                f = Path(f).name
 
             filtered_files.append(f)
 
