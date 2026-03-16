@@ -9,7 +9,8 @@
 
 import curses
 import logging
-from typing import TYPE_CHECKING
+from pathlib import Path
+from typing import TYPE_CHECKING, Union
 
 from ui.base_window import BaseWindow
 from utils.file_filter import FileFilter
@@ -31,7 +32,7 @@ class ResultsPane(BaseWindow):
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
 
-    def get_selected_file(self) -> str:
+    def get_selected_file(self) -> Union[list[Path], Path]:
         return self.files[self.cursor]
 
     def create(self) -> None:
@@ -63,19 +64,21 @@ class ResultsPane(BaseWindow):
         self.needs_refresh = True
 
     def _draw_files(self) -> None:
-        max_rows = self.height - 2
-        max_width = self.width - 5
+        max_rows: int = self.height - 2
+        max_width: int = self.width - 5
 
-        visible = self.files[self.offset: self.offset + max_rows]
+        visible: list[Path] = self.files[
+            self.offset: self.offset + max_rows
+        ]
 
-        for i, file in enumerate(visible):
+        for i, filename in enumerate(visible):
             if self.files.show_filename_only:
-                file = file.name
+                file = filename.name
             else:
-                file = str(file)
+                file = str(filename)
 
-            row = i + 1
-            text = file[:max_width]
+            row: int = i + 1
+            text: str = file[:max_width]
 
             try:
                 if self.offset + i == self.cursor:
@@ -84,7 +87,6 @@ class ResultsPane(BaseWindow):
                     self.win.addstr(row, 2, text)
             except curses.error as e:
                 logging.error("_draw_files: %s", e)
-                pass
 
     def _draw_scrollbar(self) -> None:
         max_rows = self.height - 3
