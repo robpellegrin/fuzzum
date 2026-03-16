@@ -26,18 +26,10 @@ class ResultsPane(BaseWindow):
     def __init__(self, app: "App", name: str) -> None:
         super().__init__(app, name)
 
+        self.files = FileFilter(self.app.files, self.app.config)
+
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
-
-        self.files = FileFilter(self.app.files)
-
-        self.show_filenames_only: bool = (
-            self.app.config.get("ui", "show_filenames_only") or False
-        )
-
-        self.show_hidden_files: bool = (
-            self.app.config.get("ui", "show_hidden_files") or False
-        )
 
     def get_selected_file(self) -> str:
         return self.files[self.cursor]
@@ -60,21 +52,11 @@ class ResultsPane(BaseWindow):
         self.app.cursor = self.cursor
 
     def toggle_filenames(self) -> None:
-        self.show_filenames_only = not self.show_filenames_only
-        self.files.filter()
+        self.files.show_filename_only = not self.files.show_filename_only
         self.needs_refresh = True
 
-        self.app.config.set(
-            self.show_filenames_only, "ui", "show_filenames_only"
-        )
-
     def toggle_hidden_files(self) -> None:
-        state = self.files.toggle_hidden
-
-        self.app.config.set(
-            state, "ui", "show_hidden_files"
-        )
-
+        self.files.show_hidden_files = not self.files.show_hidden_files
         self.needs_refresh = True
 
     def _draw_files(self) -> None:
