@@ -23,8 +23,8 @@ class Config:
 
     def __init__(self) -> None:
         self.data = {
-            "panes": {"preview": False, "details": True},
-            "ui": {"show_hidden_files": True, "show_filenames_only": False},
+            "panes": {"preview": True, "details": True},
+            "ui": {"show_hidden_files": False, "show_filenames_only": False},
         }
 
         self.load()
@@ -37,16 +37,20 @@ class Config:
 
         dbug("Config loaded")
 
-        if self.CONFIG_FILE.exists():
+        if not self.CONFIG_FILE.exists():
+            return
+
+        try:
             with open(self.CONFIG_FILE, encoding="UTF-8") as f:
                 self.data.update(json.load(f))
+        except json.decoder.JSONDecodeError:
+            logger.warn("Config file is corrupt!")
 
     def save(self) -> None:
         """
         Writes the state of self.data to config file.
 
         """
-
         dbug("Config saved")
         self.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -72,7 +76,7 @@ class Config:
         file.
 
         """
-
+        dbug("Config set")
         d: dict[str, Any] = self.data
 
         for k in keys[:-1]:
