@@ -28,7 +28,7 @@ class SearchPane(BaseWindow):
 
         # Write query text.
         self.win.addstr(1, 2, "> " + self.app.query, curses.color_pair(1))
-        self.stdscr.move(self.height - 2, 4 + len(self.app.query))
+        self.app.stdscr.move(self.height - 2, 4 + len(self.app.query))
 
     def update_query(self, query: str) -> None:
         self.app.query += query
