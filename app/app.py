@@ -43,7 +43,9 @@ class App:
         self.cursor = 0
 
     def run(self) -> None:
-        while True:
+        self.running = True
+
+        while self.running:
             start_cursor = self.cursor
 
             key = self.stdscr.getch()

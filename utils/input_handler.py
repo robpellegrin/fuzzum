@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-14-2026
+@updated 03-16-2026
 
 """
 
@@ -33,7 +33,10 @@ class InputHandler:
         # Special keys
         ##
 
-        if key == ord("?"):
+        if key == ord('q'):
+            self.app.running = False
+
+        elif key == ord("?"):
             self.app.wm.help.show()
             self.app.wm.refresh()
 
