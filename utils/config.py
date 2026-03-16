@@ -8,8 +8,12 @@
 """
 
 import json
+import logging
 from pathlib import Path
 from typing import Any
+
+logger = logging.getLogger(__name__)
+dbug = logger.debug
 
 
 class Config:
@@ -31,6 +35,8 @@ class Config:
 
         """
 
+        dbug("Config loaded")
+
         if self.CONFIG_FILE.exists():
             with open(self.CONFIG_FILE, encoding="UTF-8") as f:
                 self.data.update(json.load(f))
@@ -41,7 +47,9 @@ class Config:
 
         """
 
+        dbug("Config saved")
         self.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+
         with open(self.CONFIG_FILE, "w", encoding="UTF-8") as f:
             json.dump(self.data, f, indent=4)
 
@@ -71,4 +79,3 @@ class Config:
             d = d.setdefault(k, {})
 
         d[keys[-1]] = value
-        self.save()
