@@ -51,6 +51,8 @@ class App:
 
             curses.doupdate()
 
+        self.config.save()
+
     def scan_files(self, root: str) -> list[str]:
         files: list[str] = []
 
