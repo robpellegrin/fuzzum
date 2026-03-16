@@ -70,11 +70,9 @@ class InputHandler:
 
         elif key == CTRL_KEYS["CTRL_P"]:
             self.app.wm.toggle_window(self.app.wm.previews)
-            self.app.wm.resize()
 
         elif key == CTRL_KEYS["CTRL_D"]:
             self.app.wm.toggle_window(self.app.wm.details)
-            self.app.wm.resize()
 
         elif key == CTRL_KEYS["CTRL_U"]:
             self.app.query = ""
