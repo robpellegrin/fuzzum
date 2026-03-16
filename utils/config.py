@@ -18,24 +18,25 @@ dbug = logger.debug
 
 class Config:
 
-    CONFIG_DIR = Path.home() / ".config" / "myapp"
-    CONFIG_FILE = CONFIG_DIR / "config.json"
+    CONFIG_DIR = Path.home()
+    CONFIG_FILE = CONFIG_DIR / ".fuzzum_config"
 
     def __init__(self) -> None:
-        self.data = {
-            "panes": {"preview": True, "details": True},
-            "ui": {"show_hidden_files": False, "show_filenames_only": False},
-        }
-
+        self.data: dict[str, Any] = {}
         self.load()
 
     def load(self) -> None:
-        """
-        Loads the contents of the config file.
-
-        """
-
-        dbug("Config loaded")
+        # Defaults
+        self.data = {
+            "panes": {
+                "preview": True,
+                "details": True
+            },
+            "file_filter": {
+                "show_hidden_files": True,
+                "show_filename_only": False
+            }
+        }
 
         if not self.CONFIG_FILE.exists():
             return
@@ -43,14 +44,10 @@ class Config:
         try:
             with open(self.CONFIG_FILE, encoding="UTF-8") as f:
                 self.data.update(json.load(f))
-        except json.decoder.JSONDecodeError:
-            logger.warn("Config file is corrupt!")
+        except json.JSONDecodeError:
+            logger.warning("Config file is corrupt!")
 
     def save(self) -> None:
-        """
-        Writes the state of self.data to config file.
-
-        """
         dbug("Config saved")
         self.CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -58,11 +55,6 @@ class Config:
             json.dump(self.data, f, indent=4)
 
     def get(self, *keys: str) -> Any:
-        """
-        Returns the value corresponding to the supplied key.
-
-        """
-
         value: Any = self.data
 
         for k in keys:
@@ -71,12 +63,6 @@ class Config:
         return value
 
     def set(self, value: Any, *keys: str) -> None:
-        """
-        Updates a config value, then writes the new state to config
-        file.
-
-        """
-        dbug("Config set")
         d: dict[str, Any] = self.data
 
         for k in keys[:-1]:
