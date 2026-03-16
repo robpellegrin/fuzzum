@@ -8,42 +8,77 @@
 """
 
 from pathlib import Path
+from utils.config import Config
 
 
 class FileFilter:
-    def __init__(self, files: list[Path], show_hidden=False, pattern=None):
-        self.files = files
+    def __init__(self, files: list[Path], config: Config):
+        self._files = files
+        self._filtered_files = files
 
-        self.show_hidden = show_hidden
-        self.pattern = pattern
+        self.config = config
+
+        self._show_hidden_files = config.get(
+            "file_filter", "show_hidden_files"
+        )
+
+        self._show_filename_only = config.get(
+            "file_filter", "show_filename_only"
+        )
+
+        self.filter()
 
     @property
     def files(self) -> list[Path]:
-        return self._files
+        return self._filtered_files
 
     @files.setter
     def files(self, files: list[Path]) -> None:
         self._files = files
 
-    def toggle_hidden(self) -> bool:
-        self.show_hidden = not self.show_hidden
+    @property
+    def show_hidden_files(self) -> bool:
+        return self._show_hidden_files
 
-        return self.show_hidden
+    @show_hidden_files.setter
+    def show_hidden_files(self, new_state: bool) -> None:
+        self._show_hidden_files = new_state
+        self.filter()
 
-    def _is_hidden(self, path):
+        self.config.set(new_state, "file_filter", "show_hidden_files")
+
+    @property
+    def show_filename_only(self) -> None:
+        return self._show_filename_only
+
+    @show_filename_only.setter
+    def show_filename_only(self, new_state: bool) -> None:
+        self._show_filename_only = new_state
+        self.filter()
+
+        self.config.set(new_state, "file_filter", "show_filename_only")
+
+    def _is_hidden_file(self, path):
         return any(part.startswith(".") for part in Path(path).parts)
 
-    def filter(self, files):
-        result = []
+    def filter(self, filter_pattern: str | None = None):
+        filtered_files = []
 
-        for f in files:
-            if not self.show_hidden and self._is_hidden(f):
+        for f in self._files:
+            # Skip hidden files.
+            if not self.show_hidden_files and self._is_hidden_file(f):
                 continue
-            if self.pattern and not Path(f).match(self.pattern):
-                continue
-            result.append(f)
 
-        return result
+            # Skip files that don't contain pattern.
+            if filter_pattern and filter_pattern in f:
+                continue
+
+            if self.show_filename_only:
+                f = Path(f).name
+
+            filtered_files.append(f)
+
+        self._filtered_files = filtered_files
 
     def __getitem__(self, index: int) -> Path:
         # Check if the index is a slice
