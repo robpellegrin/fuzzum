@@ -9,7 +9,7 @@
 
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from utils.config import Config
 
@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 
 class FileFilter:
     def __init__(self, files: list[Path], config: Config):
-        self._files = files
-        self._filtered_files = files
+        self._files: list[Path] = files
+        self._filtered_files: list[Path] = files
 
         self.config = config
 
@@ -82,7 +82,7 @@ class FileFilter:
 
         self._filtered_files = filtered_files
 
-    def __getitem__(self, index: int) -> Path:
+    def __getitem__(self, index: Union[int, Path]) -> Union[Path, list[Path]]:
         # Check if the index is a slice
         if isinstance(index, slice):
             return self.files[index]
