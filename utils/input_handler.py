@@ -33,10 +33,7 @@ class InputHandler:
         # Special keys
         ##
 
-        if key == ord("q") or key == 15:
-            self.app.running = False
-
-        elif key == ord("?"):
+        if key == ord("?"):
             self.app.wm.help.show()
             self.app.wm.refresh()
 
