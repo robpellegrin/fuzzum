@@ -24,12 +24,13 @@ class BaseWindow:
     needs_refresh: bool
     visible: bool
 
-    height: int
-    width: int
     win: curses.window
 
     def __init__(self, app: "App", name: str):
         self.app = app
+
+        self.height, self.width = self.app.stdscr.getmaxyx()
+        self.base_height = self.height
 
         self.needs_refresh = True
         self.name = name
@@ -39,13 +40,15 @@ class BaseWindow:
         except KeyError:
             self.visible = True
 
-        self.height, self.width = self.app.stdscr.getmaxyx()
-
     def toggle_visibility(self) -> None:
         self.visible = not self.visible
         self.app.config.set(self.visible, "panes", self.name)
 
     def resize(self, height: int, width: int) -> None:
+        self.height = height
+        self.width = width
+
+        # Keep values used by parent class up to date.
         self.win.resize(height, width)
 
     def draw(self) -> None:
