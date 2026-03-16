@@ -39,11 +39,7 @@ class BaseWindow:
         except KeyError:
             self.visible = True
 
-        self.height, self.width = self.stdscr.getmaxyx()
-
-    @property
-    def stdscr(self) -> curses.window:
-        return self.app.stdscr
+        self.height, self.width = self.app.stdscr.getmaxyx()
 
     def toggle_visibility(self) -> None:
         self.visible = not self.visible
