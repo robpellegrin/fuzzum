@@ -18,7 +18,7 @@ class SearchPane(BaseWindow):
         self.win = curses.newwin(3, self.width // 2, self.height - 3, 0)
 
     def draw(self) -> None:
-        # Clear search querybefore calling box() so box draws correctly.
+        # Clear search query before calling box() so box draws correctly.
         self.win.move(1, 2)
         self.win.clrtoeol()
 
@@ -32,10 +32,6 @@ class SearchPane(BaseWindow):
 
     def update_query(self, query: str) -> None:
         self.app.query += query
-        self.needs_refresh = True
-
-    def resize(self, height: int, width: int) -> None:
-        self.win.resize(height, width)
         self.needs_refresh = True
 
     def get_cursor_position(self) -> tuple[int, int]:
