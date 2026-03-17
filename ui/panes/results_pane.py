@@ -89,24 +89,26 @@ class ResultsPane(BaseWindow):
                 logging.error("_draw_files: %s", e)
 
     def _draw_scrollbar(self) -> None:
-        max_rows = self.height - 3
+        visible_rows = self.height - 2
         total_items = len(self.files)
 
-        if total_items <= max_rows:
+        if total_items <= visible_rows:
             return
 
         scrollbar_x = self.width - 2
-        scrollbar_height = max_rows
+        scrollbar_height = visible_rows
 
-        # Thumb size
-        thumb_size = max(1, int(scrollbar_height * (max_rows / total_items)))
+        # Thumb size proportional to visible content.
+        thumb_size = max(
+            1,
+            int(scrollbar_height * (visible_rows / total_items))
+        )
 
-        # Thumb position
-        thumb_pos = (
-            int(
-                (self.cursor / total_items)
-                * (scrollbar_height - thumb_size))
-            + 1
+        max_offset = total_items - visible_rows
+
+        thumb_pos = int(
+            (self.offset / max_offset)
+            * (scrollbar_height - thumb_size)
         )
 
         for i in range(scrollbar_height):
@@ -118,7 +120,7 @@ class ResultsPane(BaseWindow):
             try:
                 self.win.addstr(i + 1, scrollbar_x, char)
             except curses.error as e:
-                logger.error("_draw_scrollbar: %s", e)
+                logger.error("draw_scrollbar: %s", e)
 
     ##
     # Scrolling
