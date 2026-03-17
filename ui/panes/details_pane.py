@@ -71,4 +71,29 @@ class DetailsPane(BaseWindow):
 
         self.needs_refresh = True
 
-        return f"{size} {mtime} {perms}"
+        return f"{self._human_readable_size(size)} | {mtime} | {perms}"
+
+    @staticmethod
+    def _human_readable_size(size: int) -> str:
+        """
+        Convert bytes into a human-readable format.
+
+        :param size: Size in bytes
+        :return: Human-readable representation of size
+
+        """
+
+        if size < 0:
+            raise ValueError("Size must be a non-negative integer")
+
+        units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+        index = 0
+
+        while size >= 1024 and index < len(units) - 1:
+            size /= 1024.0
+            index += 1
+
+        # Remove trailing zeros.
+        formatted = f"{size:.2f}".rstrip('0').rstrip('.')
+
+        return f"{formatted} {units[index]}"
