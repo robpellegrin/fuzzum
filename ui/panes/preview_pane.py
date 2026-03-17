@@ -10,11 +10,12 @@
 import curses
 import logging
 import threading
-
-from pathlib import Path
 from collections import OrderedDict
+from pathlib import Path
 from typing import TYPE_CHECKING
+
 from ui.base_window import BaseWindow
+from ui.popups.message_popup import MessagePopup
 
 if TYPE_CHECKING:
     from app.app import App
@@ -104,6 +105,10 @@ class PreviewPane(BaseWindow):
         selected_file = self.app.wm.results.get_selected_file()
 
         lines: list[str] = self._read_preview(selected_file, 100)
+
+        if len(lines) == 0:
+            MessagePopup(self).show_message(" File is empty!")
+            return
 
         for i, line in enumerate(lines):
             line = line.strip()
