@@ -27,6 +27,8 @@ class ResultsPane(BaseWindow):
     def __init__(self, app: "App", name: str) -> None:
         super().__init__(app, name)
 
+        curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+
         self.files = FileFilter(self.app.files, self.app.config)
 
         self.offset = 0  # top visible item
@@ -82,9 +84,9 @@ class ResultsPane(BaseWindow):
 
             try:
                 if self.offset + i == self.cursor:
-                    self.win.addstr(row, 2, text, curses.A_REVERSE)
+                    self.win.addstr(row, 1, "〉" + text, curses.color_pair(4))
                 else:
-                    self.win.addstr(row, 2, text)
+                    self.win.addstr(row, 3, text)
             except curses.error as e:
                 logging.error("_draw_files: %s", e)
 
