@@ -28,6 +28,11 @@ class PreviewPane(BaseWindow):
     PREVIEW_LINES = 100
     MAX_PREVIEW_CACHE = 2_000
 
+    TEXT_EXTENSIONS = {
+        ".txt", ".py", ".md", ".json", ".yaml", ".yml",
+        ".csv", ".xml", ".html", ".css", ".js"
+    }
+
     def __init__(self, app: "App", name: str) -> None:
         super().__init__(app, name)
 
@@ -68,15 +73,13 @@ class PreviewPane(BaseWindow):
         return lines
 
     def _is_text_file(self, path: Path) -> bool:
-        if path.suffix in ['txt', '.py']:
+        if path.suffix.lower() in self.TEXT_EXTENSIONS:
             return True
 
         try:
             with open(path, "rb") as f:
-                chunk = f.read(1024)
-                if b"\0" in chunk:
-                    return False
-                return True
+                chunk = f.read(8_000)
+                return b"\0" not in chunk
         except (FileNotFoundError, PermissionError):
             return False
 
@@ -102,20 +105,17 @@ class PreviewPane(BaseWindow):
         max_lines: int = self.height - 3
         max_width: int = self.width - 6
 
-        selected_file = self.app.wm.results.get_selected_file()
+        selected_file: Path = self.app.wm.results.get_selected_file()
 
         lines: list[str] = self._read_preview(selected_file, 100)
 
-        if len(lines) == 0:
+        if not lines:
             MessagePopup(self).show_message(" File is empty!")
             return
 
-        for i, line in enumerate(lines):
+        for i, line in enumerate(lines[:max_lines]):
             line = line.strip()
             row: int = i + 1
-
-            if row >= max_lines:
-                return
 
             try:
                 self.win.addstr(row, 2, line[:max_width])
