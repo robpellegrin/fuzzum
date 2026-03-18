@@ -7,11 +7,15 @@
 
 """
 import curses
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ui.base_window import BaseWindow
 
 
 class MessagePopup:
 
-    def __init__(self, parent):
+    def __init__(self, parent: "BaseWindow") -> None:
         self.parent = parent
 
     def show_message(self, message: str) -> None:
