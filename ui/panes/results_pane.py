@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03-11-2026
 
-@updated 03-16-2026
+@updated 03-17-2026
 
 """
 
@@ -63,6 +63,8 @@ class ResultsPane(BaseWindow):
 
     def toggle_hidden_files(self) -> None:
         self.files.show_hidden_files = not self.files.show_hidden_files
+        self.offset = 0
+        self.cursor = 0
         self.needs_refresh = True
 
     def _draw_files(self) -> None:
