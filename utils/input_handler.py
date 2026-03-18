@@ -38,7 +38,8 @@ class InputHandler:
 
         elif key == ord("?"):
             self.app.wm.help.show()
-            self.app.wm.refresh()
+            self.app.wm.previews.needs_refresh = True
+            self.app.wm.results.needs_refresh = True
 
         elif key == ord("."):
             self.app.wm.results.toggle_hidden_files()
