@@ -143,7 +143,7 @@ class ResultsPane(BaseWindow):
         if self.cursor == len(self.files) - 1:
             return
 
-        page = self.win.getmaxyx()[0] - 2
+        page = self.win.getmaxyx()[0] - 3
         self.cursor = min(len(self.files) - 1, self.cursor + page)
         self._adjust_offset()
 
@@ -151,7 +151,7 @@ class ResultsPane(BaseWindow):
         if self.cursor == 0:
             return
 
-        page = self.win.getmaxyx()[0] - 2
+        page = self.win.getmaxyx()[0] - 3
         self.cursor = max(0, self.cursor - page)
         self._adjust_offset()
 
