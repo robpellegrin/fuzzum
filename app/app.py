@@ -45,10 +45,8 @@ class App:
     def run(self) -> None:
         self.running = True
 
-        while self.running:
+        while (key := self.stdscr.getch()) != ord('q'):
             start_cursor = self.cursor
-
-            key = self.stdscr.getch()
 
             self.input.handle(key)
             self.wm.refresh()
