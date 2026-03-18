@@ -50,7 +50,7 @@ class DetailsPane(BaseWindow):
         selected_file = self.app.wm.results.get_selected_file()
 
         try:
-            info: os.stat_result = os.stat(selected_file)
+            info: os.stat_result = os.stat(str(selected_file))
         except FileNotFoundError:
             return "File not found!"
         except PermissionError:
@@ -74,7 +74,7 @@ class DetailsPane(BaseWindow):
         return f"{self._human_readable_size(size)} | {mtime} | {perms}"
 
     @staticmethod
-    def _human_readable_size(size: int) -> str:
+    def _human_readable_size(size: float) -> str:
         """
         Convert bytes into a human-readable format.
 
@@ -90,7 +90,7 @@ class DetailsPane(BaseWindow):
         index = 0
 
         while size >= 1024 and index < len(units) - 1:
-            size /= 1024.0
+            size /= 1024
             index += 1
 
         # Remove trailing zeros.
