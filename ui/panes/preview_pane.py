@@ -75,7 +75,7 @@ class PreviewPane(BaseWindow):
                     if i >= max_lines:
                         return lines
 
-                    lines.append(line.rstrip())
+                    lines.append(line)
         except (FileNotFoundError, PermissionError) as e:
             lines = [f"Error reading file: {e}"]
 
@@ -116,17 +116,20 @@ class PreviewPane(BaseWindow):
 
         selected_file: Path = self.app.wm.results.get_selected_file()
 
-        lines: list[str] = self._read_preview(selected_file, 100)
+        if not self._is_text_file(selected_file):
+            MessagePopup(self).show_message("Binary cannot be previewed.")
+            return
+
+        lines: list[str] = self._read_preview(selected_file, max_lines)
 
         if not lines:
-            MessagePopup(self).show_message("FILE IS EMPTY")
+            MessagePopup(self).show_message("EMPTY FILE")
             return
 
         for i, line in enumerate(lines[:max_lines]):
-            line = line.strip()
             row: int = i + 1
 
             try:
-                self.win.addstr(row, 2, line[:max_width])
+                self.win.addstr(row, 2, line[:max_width].rstrip())
             except curses.error as e:
                 logging.error("_draw_preview: %s", e)
