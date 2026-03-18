@@ -7,6 +7,9 @@
 #
 ##
 
+[tool.pylint]
+disable = ["missing-class-docstring", "missing-function-docstring"]
+
 [tool.mypy]
 # Configure the directories and files to be analyzed by mypy.
 files = "app, ui, utils, main.py"
