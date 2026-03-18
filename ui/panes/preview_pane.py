@@ -73,9 +73,10 @@ class PreviewPane(BaseWindow):
             with open(path, "r", errors="replace", encoding="UTF-8") as f:
                 for i, line in enumerate(f):
                     if i >= max_lines:
-                        return lines
+                        break
 
-                    lines.append(line)
+                    lines.append(self.sanitize(line))
+
         except (FileNotFoundError, PermissionError) as e:
             lines = [f"Error reading file: {e}"]
 
@@ -96,7 +97,7 @@ class PreviewPane(BaseWindow):
         """Thread function to read preview and store in cache"""
 
         try:
-            lines = self._read_preview(path)
+            lines: list[str] = self._read_preview(path)
             with self._preview_lock:
                 self._preview_cache[path] = lines
                 self._preview_cache.move_to_end(path)
@@ -133,3 +134,18 @@ class PreviewPane(BaseWindow):
                 self.win.addstr(row, 2, line[:max_width].rstrip())
             except curses.error as e:
                 logging.error("_draw_preview: %s", e)
+
+    @staticmethod
+    def sanitize(line: str) -> str:
+        """Returns a string of only ASCII characters and newlines."""
+
+        sanitized_line = ""
+
+        for ch in line:
+            if 32 <= ord(ch) <= 126:
+                sanitized_line += ch
+
+            if ord(ch) == "\n":
+                sanitized_line += ch
+
+        return sanitized_line
