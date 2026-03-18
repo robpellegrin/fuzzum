@@ -61,13 +61,17 @@ class PreviewPane(BaseWindow):
 
         self._draw_preview()
 
-    def _read_preview(self, path, max_lines=PREVIEW_LINES):
+    def _read_preview(
+        self,
+        path: Path,
+        max_lines: int = PREVIEW_LINES
+    ) -> list[str]:
         """Read text preview of a file"""
 
         if not self._is_text_file(path):
             return ["Binary cannot be previewed"]
 
-        lines = []
+        lines: list[str] = []
 
         try:
             with open(path, "r", errors="replace", encoding="UTF-8") as f:
@@ -93,7 +97,7 @@ class PreviewPane(BaseWindow):
         except (FileNotFoundError, PermissionError):
             return False
 
-    def _load_preview_async(self, path):
+    def _load_preview_async(self, path: Path) -> None:
         """Thread function to read preview and store in cache"""
 
         try:
@@ -145,7 +149,7 @@ class PreviewPane(BaseWindow):
             if 32 <= ord(ch) <= 126:
                 sanitized_line += ch
 
-            if ord(ch) == "\n":
+            if ch == "\n":
                 sanitized_line += ch
 
         return sanitized_line
