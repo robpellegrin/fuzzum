@@ -29,8 +29,17 @@ class PreviewPane(BaseWindow):
     MAX_PREVIEW_CACHE = 2_000
 
     TEXT_EXTENSIONS = {
-        ".txt", ".py", ".md", ".json", ".yaml", ".yml",
-        ".csv", ".xml", ".html", ".css", ".js"
+        ".txt",
+        ".py",
+        ".md",
+        ".json",
+        ".yaml",
+        ".yml",
+        ".csv",
+        ".xml",
+        ".html",
+        ".css",
+        ".js",
     }
 
     def __init__(self, app: "App", name: str) -> None:
@@ -87,7 +96,7 @@ class PreviewPane(BaseWindow):
         """Thread function to read preview and store in cache"""
 
         try:
-            lines = self.read_preview(path)
+            lines = self._read_preview(path)
             with self._preview_lock:
                 self._preview_cache[path] = lines
                 self._preview_cache.move_to_end(path)
@@ -110,7 +119,7 @@ class PreviewPane(BaseWindow):
         lines: list[str] = self._read_preview(selected_file, 100)
 
         if not lines:
-            MessagePopup(self).show_message(" File is empty!")
+            MessagePopup(self).show_message("FILE IS EMPTY")
             return
 
         for i, line in enumerate(lines[:max_lines]):
