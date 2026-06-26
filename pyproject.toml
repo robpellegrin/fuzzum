@@ -32,7 +32,7 @@ Homepage = "https://gitlab.robpellegrin.com/robpellegrin/fuzzum"
 Issues = "https://gitlab.robpellegrin.com/robpellegrin/fuzzum/issues"
 
 [project.scripts]
-fuzz = "fuzzum:main.main"
+fuzz = "fuzzum:main.cli"
 
 [tool.pylint]
 disable = ["missing-class-docstring", "missing-function-docstring"]
