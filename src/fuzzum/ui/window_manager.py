@@ -43,7 +43,8 @@ class WindowManager:
             self.search,
         ]
 
-    def __iter__(self) -> Generator[BaseWindow]:
+    #! Type annotation causing issues in py3.9
+    def __iter__(self): # -> Generator[BaseWindow]:
         yield from self.window_list
 
     @property
