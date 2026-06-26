@@ -1,7 +1,7 @@
 """
 @file    main.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
 
 TODO:
@@ -45,6 +45,10 @@ def main(stdscr: curses.window) -> None:
         app.run()
     except KeyboardInterrupt:
         pass
+
+
+def cli() -> None:
+    curses.wrapper(main)
 
 
 if __name__ == "__main__":
