@@ -8,14 +8,18 @@
 """
 
 import logging
-from fuzzum.app.app import App
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fuzzum.app.app import App
+
 
 logger = logging.getLogger(__name__)
 
 
 class BaseWindow:
 
-    def __init__(self, app: App, name: str):
+    def __init__(self, app: "App", name: str):
         self.app = app
 
         self.height, self.width = self.app.stdscr.getmaxyx()
