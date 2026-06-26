@@ -7,6 +7,33 @@
 #
 ##
 
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fuzzum"
+version = "0.0.1"
+authors = [
+  { name="Rob Pellegrin", email="none@none.com" },
+]
+description = "A fuzzy file finder"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://gitlab.robpellegrin.com/robpellegrin/fuzzum"
+Issues = "https://gitlab.robpellegrin.com/robpellegrin/fuzzum/issues"
+
+[project.scripts]
+fuzz = "fuzzum:main.main"
+
 [tool.pylint]
 disable = ["missing-class-docstring", "missing-function-docstring"]
 
