@@ -20,12 +20,6 @@ logger = logging.getLogger(__name__)
 
 class BaseWindow:
 
-    name: str
-    needs_refresh: bool
-    visible: bool
-
-    win: curses.window
-
     def __init__(self, app: "App", name: str):
         self.app = app
 
