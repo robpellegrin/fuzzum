@@ -69,7 +69,11 @@ class WindowManager:
             window.refresh_window()
 
         y, x = self.search.get_cursor_position()
-        self.app.stdscr.move(y, x)
+
+        try:
+            self.app.stdscr.move(y, x)
+        except Exception:
+            pass
 
     def resize(self) -> None:
         self._resize_results()
