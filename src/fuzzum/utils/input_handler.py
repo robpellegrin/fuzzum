@@ -1,9 +1,9 @@
 """
 @file    input_handler.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-16-2026
+@updated 06/25/2026
 
 """
 
@@ -11,7 +11,7 @@ import curses
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from app.app import App
+    from fuzzum.app.app import App
 
 CTRL_KEYS = {
     "CTRL_A": 1,

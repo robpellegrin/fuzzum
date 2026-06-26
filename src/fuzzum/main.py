@@ -9,19 +9,19 @@ TODO:
         `find .  -type f -name *.py | xargs -P 10 grep "Rob"`.
 
 
-@updated 03-14-2026
+@updated 06/25/2026
 
 """
 
 import curses
 import logging
 
-from app.app import App
+from fuzzum.app.app import App
 
 # Enable logging
 logging.basicConfig(
     filename="app.log",
-    filemode='w',
+    filemode="w",
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )

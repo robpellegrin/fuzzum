@@ -1,9 +1,9 @@
 """
 @file    base_window.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-14-2026
+@updated 06/25/2026
 
 """
 
@@ -12,7 +12,7 @@ import logging
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from app.app import App
+    from fuzzum.app.app import App
 
 
 logger = logging.getLogger(__name__)

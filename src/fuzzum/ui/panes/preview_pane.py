@@ -1,9 +1,9 @@
 """
 @file    preview_pane.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-16-2026
+@updated 06/25/2026
 
 """
 
@@ -14,8 +14,8 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from ui.base_window import BaseWindow
-from ui.popups.message_popup import MessagePopup
+from fuzzum.ui.base_window import BaseWindow
+from fuzzum.ui.popups.message_popup import MessagePopup
 
 if TYPE_CHECKING:
     from app.app import App
@@ -61,11 +61,7 @@ class PreviewPane(BaseWindow):
 
         self._draw_preview()
 
-    def _read_preview(
-        self,
-        path: Path,
-        max_lines: int = PREVIEW_LINES
-    ) -> list[str]:
+    def _read_preview(self, path: Path, max_lines: int = PREVIEW_LINES) -> list[str]:
         """Read text preview of a file"""
 
         if not self._is_text_file(path):

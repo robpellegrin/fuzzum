@@ -1,15 +1,15 @@
 """
 @file    search_pane.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-14-2026
+@updated 06/25/2026
 
 """
 
 import curses
 
-from ui.base_window import BaseWindow
+from fuzzum.ui.base_window import BaseWindow
 
 
 class SearchPane(BaseWindow):

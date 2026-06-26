@@ -1,21 +1,21 @@
 """
 @file    window_manager.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-16-2026
+@updated 06/25/2026
 
 """
 
 import logging
 from typing import TYPE_CHECKING, Generator
 
-from ui.base_window import BaseWindow
-from ui.help_popup import HelpPopup
-from ui.panes.details_pane import DetailsPane
-from ui.panes.preview_pane import PreviewPane
-from ui.panes.results_pane import ResultsPane
-from ui.panes.search_pane import SearchPane
+from fuzzum.ui.base_window import BaseWindow
+from fuzzum.ui.help_popup import HelpPopup
+from fuzzum.ui.panes.details_pane import DetailsPane
+from fuzzum.ui.panes.preview_pane import PreviewPane
+from fuzzum.ui.panes.results_pane import ResultsPane
+from fuzzum.ui.panes.search_pane import SearchPane
 
 if TYPE_CHECKING:
     from app.app import App
@@ -32,13 +32,9 @@ class WindowManager:
         self.results = ResultsPane(app, "results")
         self.search = SearchPane(app, "search")
 
-        self.details.visible = (
-            self.app.config.get("panes", "details") or False
-        )
+        self.details.visible = self.app.config.get("panes", "details") or False
 
-        self.previews.visible = (
-            self.app.config.get("panes", "preview") or False
-        )
+        self.previews.visible = self.app.config.get("panes", "preview") or False
 
         self.window_list = [
             self.details,

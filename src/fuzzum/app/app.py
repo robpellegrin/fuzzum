@@ -1,7 +1,7 @@
 """
 @file:    app.py
 @author:  Rob Pellegrin
-@date:    03-11-2026
+@date:    03/11/2026
 
 TODO
     - Finish metadata.
@@ -9,7 +9,7 @@ TODO
     - File previews.
     - If len(query) > 1 and len(results) < 1, make query text red.
 
-@updated: 03-16-2026
+@updated 06/25/2026
 
 """
 
@@ -18,9 +18,9 @@ import logging
 import sys
 from pathlib import Path
 
-from ui.window_manager import WindowManager
-from utils.config import Config
-from utils.input_handler import InputHandler
+from fuzzum.ui.window_manager import WindowManager
+from fuzzum.utils.config import Config
+from fuzzum.utils.input_handler import InputHandler
 
 logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ class App:
     def run(self) -> None:
         self.running = True
 
-        while (key := self.stdscr.getch()) != ord('q'):
+        while (key := self.stdscr.getch()) != ord("q"):
             start_cursor = self.cursor
 
             self.input.handle(key)

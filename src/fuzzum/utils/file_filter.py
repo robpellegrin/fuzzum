@@ -1,9 +1,9 @@
 """
 @file    file_filter.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-16-2026
+@updated 06/25/2026
 
 """
 
@@ -11,7 +11,7 @@ import logging
 from pathlib import Path
 from typing import Optional, Union
 
-from utils.config import Config
+from fuzzum.utils.config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -23,13 +23,9 @@ class FileFilter:
 
         self.config = config
 
-        self._show_hidden_files: bool = config.get(
-            "file_filter", "show_hidden_files"
-        )
+        self._show_hidden_files: bool = config.get("file_filter", "show_hidden_files")
 
-        self._show_filename_only: bool = config.get(
-            "file_filter", "show_filename_only"
-        )
+        self._show_filename_only: bool = config.get("file_filter", "show_filename_only")
 
         self.filter()
 

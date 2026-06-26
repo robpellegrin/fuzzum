@@ -3,14 +3,15 @@
 @author  Rob Pellegrin
 @date    03-16-2026
 
-@updated 03-17-2026
+@updated 06/25/2026
 
 """
+
 import curses
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ui.base_window import BaseWindow
+    from fuzzum.ui.base_window import BaseWindow
 
 
 class MessagePopup:

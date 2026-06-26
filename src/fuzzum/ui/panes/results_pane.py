@@ -1,9 +1,9 @@
 """
 @file    results_pane.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-17-2026
+@updated 06/25/2026
 
 """
 
@@ -12,8 +12,8 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Union
 
-from ui.base_window import BaseWindow
-from utils.file_filter import FileFilter
+from fuzzum.ui.base_window import BaseWindow
+from fuzzum.utils.file_filter import FileFilter
 
 if TYPE_CHECKING:
     from app.app import App
@@ -71,9 +71,7 @@ class ResultsPane(BaseWindow):
         max_rows: int = self.height - 2
         max_width: int = self.width - 5
 
-        visible: list[Path] = self.files[
-            self.offset: self.offset + max_rows
-        ]
+        visible: list[Path] = self.files[self.offset : self.offset + max_rows]
 
         for i, filename in enumerate(visible):
             if self.files.show_filename_only:
@@ -103,17 +101,11 @@ class ResultsPane(BaseWindow):
         scrollbar_height = visible_rows
 
         # Thumb size proportional to visible content.
-        thumb_size = max(
-            1,
-            int(scrollbar_height * (visible_rows / total_items))
-        )
+        thumb_size = max(1, int(scrollbar_height * (visible_rows / total_items)))
 
         max_offset = total_items - visible_rows
 
-        thumb_pos = int(
-            (self.offset / max_offset)
-            * (scrollbar_height - thumb_size)
-        )
+        thumb_pos = int((self.offset / max_offset) * (scrollbar_height - thumb_size))
 
         for i in range(scrollbar_height):
             char = "│"

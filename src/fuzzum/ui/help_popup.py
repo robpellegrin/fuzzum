@@ -1,9 +1,9 @@
 """
 @file    help_popup.py
 @author  Rob Pellegrin
-@date    03-11-2026
+@date    03/11/2026
 
-@updated 03-14-2026
+@updated 06/25/2026
 
 """
 
