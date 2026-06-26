@@ -48,6 +48,7 @@ def main(stdscr: curses.window) -> None:
 
 
 def cli() -> None:
+    """Helper function to call main when using as package."""
     curses.wrapper(main)
 
 
