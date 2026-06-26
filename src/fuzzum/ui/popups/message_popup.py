@@ -8,10 +8,16 @@
 """
 
 import curses
-from fuzzum.ui.base_window import BaseWindow
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fuzzum.ui.base_window import BaseWindow
 
 
-class MessagePopup(BaseWindow):
+class MessagePopup:
+
+    def __init__(self, parent: "BaseWindow") -> None:
+        self.parent = parent
 
     def show_message(self, message: str) -> None:
         h, w = self.parent.win.getmaxyx()
