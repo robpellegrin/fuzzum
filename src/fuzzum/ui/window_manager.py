@@ -8,7 +8,7 @@
 """
 
 import logging
-from typing import TYPE_CHECKING, Generator
+from typing import TYPE_CHECKING
 
 from fuzzum.ui.base_window import BaseWindow
 from fuzzum.ui.help_popup import HelpPopup
@@ -43,8 +43,7 @@ class WindowManager:
             self.search,
         ]
 
-    #! Type annotation causing issues in py3.9
-    def __iter__(self): # -> Generator[BaseWindow]:
+    def __iter__(self):
         yield from self.window_list
 
     @property
