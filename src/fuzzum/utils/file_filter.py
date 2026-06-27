@@ -23,9 +23,13 @@ class FileFilter:
 
         self.config = config
 
-        self._show_hidden_files: bool = config.get("file_filter", "show_hidden_files")
+        self._show_hidden_files: bool = config.get(
+            "file_filter", "show_hidden_files"
+        )
 
-        self._show_filename_only: bool = config.get("file_filter", "show_filename_only")
+        self._show_filename_only: bool = config.get(
+            "file_filter", "show_filename_only"
+        )
 
         self.filter()
 

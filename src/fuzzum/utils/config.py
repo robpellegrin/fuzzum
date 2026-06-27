@@ -29,7 +29,10 @@ class Config:
         # Defaults
         self.data = {
             "panes": {"preview": True, "details": True},
-            "file_filter": {"show_hidden_files": True, "show_filename_only": False},
+            "file_filter": {
+                "show_hidden_files": True,
+                "show_filename_only": False,
+            },
         }
 
         if not self.CONFIG_FILE.exists():

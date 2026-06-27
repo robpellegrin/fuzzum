@@ -61,7 +61,9 @@ class PreviewPane(BaseWindow):
 
         self._draw_preview()
 
-    def _read_preview(self, path: Path, max_lines: int = PREVIEW_LINES) -> list[str]:
+    def _read_preview(
+        self, path: Path, max_lines: int = PREVIEW_LINES
+    ) -> list[str]:
         """Read text preview of a file"""
 
         if not self._is_text_file(path):

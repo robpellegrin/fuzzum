@@ -34,7 +34,9 @@ class WindowManager:
 
         self.details.visible = self.app.config.get("panes", "details") or False
 
-        self.previews.visible = self.app.config.get("panes", "preview") or False
+        self.previews.visible = (
+            self.app.config.get("panes", "preview") or False
+        )
 
         self.window_list = [
             self.details,
