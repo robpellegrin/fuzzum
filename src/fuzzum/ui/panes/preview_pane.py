@@ -137,8 +137,7 @@ class PreviewPane(BaseWindow):
             except curses.error as e:
                 logging.error("_draw_preview: %s", e)
 
-    @staticmethod
-    def sanitize(line: str) -> str:
+    def sanitize(self, line: str) -> str:
         """Returns a string of only ASCII characters and newlines."""
 
         sanitized_line = ""
