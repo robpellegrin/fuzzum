@@ -13,9 +13,10 @@ TODO:
 """
 
 import curses
+import datetime
 import logging
-import os
-import time
+import stat
+from pathlib import Path
 
 from fuzzum.ui.base_window import BaseWindow
 
@@ -47,28 +48,22 @@ class DetailsPane(BaseWindow):
         selected_file = self.app.wm.results.get_selected_file()
 
         try:
-            info: os.stat_result = os.stat(str(selected_file))
+            st = Path(selected_file).stat()
         except FileNotFoundError:
             return "File not found!"
         except PermissionError:
             return "Permission Error!"
 
-        # File size in bytes
-        size: int = info.st_size
-
-        # Last modification time (timestamp)
-        mtime: str = time.strftime(
-            "%Y-%m-%d %H:%M:%S", time.localtime(info.st_mtime)
-        )
-
-        # Permissions as octal
-        perms: str = oct(info.st_mode & 0o777)
+        perms = stat.filemode(st.st_mode)
+        size = self._human_readable_size(st.st_size)
+        mtime = datetime.datetime.fromtimestamp(st.st_mtime)
+        mtime = mtime.strftime("%y-%m-%d %H:%M:%S")
 
         logger.debug("DetailsPane has file: %s", selected_file)
 
         self.needs_refresh = True
 
-        return f"{self._human_readable_size(size)} | {mtime} | {perms}"
+        return f"{perms} | {mtime} | {size}"
 
     @staticmethod
     def _human_readable_size(size: float) -> str:
@@ -93,4 +88,4 @@ class DetailsPane(BaseWindow):
         # Remove trailing zeros.
         formatted = f"{size:.2f}".rstrip("0").rstrip(".")
 
-        return f"{formatted} {units[index]}"
+        return f"{formatted}{units[index]}"
