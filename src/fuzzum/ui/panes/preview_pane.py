@@ -52,7 +52,7 @@ class PreviewPane(BaseWindow):
         left_width = self.width // 2
         right_width = self.width - left_width
 
-        self.win = curses.newwin(self.height - 3, right_width, 0, left_width)
+        self.win = curses.newwin(self.height - 2, right_width, 0, left_width)
 
     def draw(self) -> None:
         self.win.erase()
