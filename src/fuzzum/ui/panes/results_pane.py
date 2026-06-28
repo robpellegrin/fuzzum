@@ -37,7 +37,7 @@ class ResultsPane(BaseWindow):
         self.cursor = 0  # selected item
 
     def get_selected_file(self) -> Union[list[Path], Path]:
-        return self.files[self.cursor]
+        return self.files[self.cursor].resolve()
 
     def create(self) -> None:
         self.win = curses.newwin(self.height - 3, self.width // 2, 0, 0)
