@@ -7,11 +7,22 @@
 
 """
 
+import curses
 import logging
+from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from fuzzum.app.app import App
+
+
+@contextmanager
+def curses_attr(win, attr):
+    win.attron(attr)
+    try:
+        yield
+    finally:
+        win.attroff(attr)
 
 
 logger = logging.getLogger(__name__)
