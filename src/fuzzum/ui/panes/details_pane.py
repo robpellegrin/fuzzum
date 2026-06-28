@@ -30,10 +30,7 @@ class DetailsPane(BaseWindow):
         )
 
     def draw(self) -> None:
-        self.win.move(1, 2)
-        self.win.clrtoeol()
-
-        self.win.box()
+        super().draw()
         self.win.addstr(0, 2, " Details ", curses.color_pair(3))
 
         details_str: str = self._stat_file()

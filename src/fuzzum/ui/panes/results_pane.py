@@ -13,11 +13,12 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Union
 
 from fuzzum.ui.base_window import BaseWindow
-from fuzzum.utils.file_filter import FileFilter
 from fuzzum.ui.scroll_bar import ScrollBar
+from fuzzum.utils.file_filter import FileFilter
 
 if TYPE_CHECKING:
     from app.app import App
+
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +48,8 @@ class ResultsPane(BaseWindow):
         )
 
     def draw(self) -> None:
+        super().draw()
+
         self.scroll_bar = ScrollBar(
             self.win,
             self.height - 2,
@@ -55,8 +58,6 @@ class ResultsPane(BaseWindow):
             self.offset,
         )
 
-        self.win.erase()
-        self.win.box()
         self.header(len(self.files))
 
         self._draw_files()

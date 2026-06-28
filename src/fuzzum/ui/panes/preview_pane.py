@@ -55,10 +55,9 @@ class PreviewPane(BaseWindow):
         self.win = curses.newwin(self.height - 2, right_width, 0, left_width)
 
     def draw(self) -> None:
-        self.win.erase()
-        self.win.box()
-        self.win.addstr(0, 2, " Preview ", curses.color_pair(3))
+        super().draw()
 
+        self.win.addstr(0, 2, " Preview ", curses.color_pair(3))
         self._draw_preview()
 
     def _read_preview(
