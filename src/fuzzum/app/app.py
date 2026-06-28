@@ -58,7 +58,12 @@ class App:
 
             curses.doupdate()
 
+            if not self.running:
+                break
+
         self.config.save()
+
+        return self.wm.results.get_selected_file()
 
     def scan_files(self, root: str) -> list[Path]:
         files: list[Path] = []
