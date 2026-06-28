@@ -15,6 +15,7 @@ TODO:
 
 import curses
 import logging
+import os
 
 from fuzzum.app.app import App
 
@@ -42,14 +43,29 @@ def main(stdscr: curses.window) -> None:
     app = App(stdscr)
 
     try:
-        app.run()
+        result = app.run()
     except KeyboardInterrupt:
         pass
+
+    return result
 
 
 def cli() -> None:
     """Helper function to call main when using as package."""
-    curses.wrapper(main)
+
+    # Curses should write to tty instead of stdout.
+    with open("/dev/tty", "w") as tty:
+        old_stdout = os.dup(1)
+
+        try:
+            os.dup2(tty.fileno(), 1)
+            result = curses.wrapper(main)
+        finally:
+            os.dup2(old_stdout, 1)
+            os.close(old_stdout)
+
+    if result:
+        print(result)
 
 
 if __name__ == "__main__":
