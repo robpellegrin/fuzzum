@@ -56,7 +56,10 @@ class BaseWindow:
         self.win.resize(height, width)
 
     def draw(self) -> None:
-        raise NotImplementedError
+        self.win.erase()
+
+        with curses_attr(self.win, curses.color_pair(0) | curses.A_DIM):
+            self.win.box()
 
     def create(self) -> None:
         raise NotImplementedError
