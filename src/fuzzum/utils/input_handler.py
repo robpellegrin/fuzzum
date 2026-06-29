@@ -20,6 +20,7 @@ CTRL_KEYS = {
     "CTRL_D": 4,
     "CTRL_H": 8,
     "CTRL_P": 16,
+    "CTRL_T": 20,
     "CTRL_U": 21,
 }
 
@@ -74,6 +75,9 @@ class InputHandler:
 
         elif key == CTRL_KEYS["CTRL_D"]:
             self.app.wm.toggle_window(self.app.wm.details)
+
+        elif key == CTRL_KEYS["CTRL_T"]:
+            self.app.tclip()
 
         elif key == CTRL_KEYS["CTRL_U"]:
             self.app.query = ""
