@@ -17,6 +17,7 @@ import curses
 import logging
 import sys
 from pathlib import Path
+import subprocess
 
 from fuzzum.ui.window_manager import WindowManager
 from fuzzum.utils.config import Config
@@ -64,6 +65,18 @@ class App:
         self.config.save()
 
         return self.wm.results.get_selected_file()
+
+    def tclip(self) -> int:
+        selection = self.wm.results.get_selected_file()
+
+        cmd = subprocess.run([
+            "tmux",
+            "set-buffer",
+            "--",
+            selection,
+        ], check=True)
+
+        return cmd.returncode
 
     def scan_files(self, root: str) -> list[Path]:
         files: list[Path] = []
