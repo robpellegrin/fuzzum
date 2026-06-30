@@ -10,6 +10,7 @@ TODO
 
 """
 
+import argparse
 import curses
 import logging
 import os
@@ -25,7 +26,9 @@ logging.getLogger(__name__)
 
 
 class App:
-    def __init__(self, stdscr: curses.window, args) -> None:
+    def __init__(
+        self, stdscr: curses.window, args: argparse.Namespace
+    ) -> None:
         root = args.path
 
         self.stdscr = stdscr
@@ -41,7 +44,7 @@ class App:
         self.needs_filter = True
         self.cursor = 0
 
-    def run(self) -> None:
+    def run(self) -> Path:
         self.running = True
 
         while (key := self.stdscr.getch()) != ord("q"):
@@ -67,7 +70,9 @@ class App:
 
         self.config.save()
 
-        return self.files[self.cursor].resolve()
+        selected_file: Path = self.files[self.cursor].resolve()
+
+        return selected_file
 
     def tclip(self) -> int:
         selection = self.files[self.cursor].resolve()
@@ -92,7 +97,7 @@ class App:
 
         return returncode
 
-    def scan_files(self, start_dir: Path, max_depth: int) -> list[Path]:
+    def scan_files(self, start_dir: str, max_depth: int) -> list[Path]:
 
         if not isinstance(start_dir, (str, Path)):
             raise ValueError(f"Invalid directory path: {start_dir}")
@@ -100,8 +105,8 @@ class App:
         if not isinstance(max_depth, int) or max_depth < 0:
             raise ValueError("max_depth must be a non-negative integer")
 
-        files = []
-        stack = [(start_dir, 0)]
+        files: list[Path] = []
+        stack: list[tuple[str, int]] = [(start_dir, 0)]
 
         while stack:
             current_dir, depth = stack.pop()

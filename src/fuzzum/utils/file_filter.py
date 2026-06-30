@@ -11,7 +11,6 @@ import logging
 from pathlib import Path
 from typing import Union
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -27,8 +26,8 @@ class FileFilter:
     def _is_hidden_file(self, path: Path) -> bool:
         return any(part.startswith(".") for part in Path(path).parts)
 
-    def filter(self, filter_pattern) -> None:
-        filtered_files = []
+    def filter(self, filter_pattern: str) -> None:
+        filtered_files: list[Path] = []
 
         for file in self._all_files:
             if filter_pattern in file.name:

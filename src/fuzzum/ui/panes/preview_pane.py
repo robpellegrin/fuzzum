@@ -45,7 +45,7 @@ class PreviewPane(BaseWindow):
     def __init__(self, app: "App", name: str) -> None:
         super().__init__(app, name)
 
-        self._preview_cache = OrderedDict()
+        self._preview_cache: OrderedDict[Path, list[str]] = OrderedDict()
         self._preview_lock = threading.Lock()
 
     def create(self) -> None:

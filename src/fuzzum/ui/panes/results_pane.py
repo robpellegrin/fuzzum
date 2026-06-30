@@ -10,7 +10,7 @@
 import curses
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from fuzzum.ui.base_window import BaseWindow
 from fuzzum.ui.scroll_bar import ScrollBar

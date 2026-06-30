@@ -57,13 +57,12 @@ class DetailsPane(BaseWindow):
         perms = stat.filemode(st.st_mode)
         size = self._human_readable_size(st.st_size)
         mtime = datetime.datetime.fromtimestamp(st.st_mtime)
-        mtime = mtime.strftime("%y-%m-%d %H:%M:%S")
 
         logger.debug("DetailsPane has file: %s", selected_file)
 
         self.needs_refresh = True
 
-        return f"{perms} | {mtime} | {size}"
+        return f"{perms} | {mtime.strftime('%y-%m-%d %H:%M:%S')} | {size}"
 
     @staticmethod
     def _human_readable_size(size: float) -> str:

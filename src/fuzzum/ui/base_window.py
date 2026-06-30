@@ -34,11 +34,15 @@ class BaseWindow:
         self.win: curses.window
         self.app = app
 
+        self.height: int
+        self.width: int
         self.height, self.width = self.app.stdscr.getmaxyx()
-        self.base_height = self.height
+
+        self.base_height: int = self.height
 
         self.needs_refresh = True
-        self.name = name
+        self.visible: bool = True
+        self.name: str = name
 
         try:
             self.visible = self.app.config.get("panes", self.name)

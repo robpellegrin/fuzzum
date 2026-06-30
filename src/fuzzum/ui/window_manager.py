@@ -3,12 +3,12 @@
 @author  Rob Pellegrin
 @date    03/11/2026
 
-@updated 06/25/2026
+@updated 06/30/2026
 
 """
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterator
 
 from fuzzum.ui.base_window import BaseWindow
 from fuzzum.ui.help_popup import HelpPopup
@@ -45,7 +45,7 @@ class WindowManager:
             self.search,
         ]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[BaseWindow]:
         yield from self.window_list
 
     @property

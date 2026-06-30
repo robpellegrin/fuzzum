@@ -14,10 +14,12 @@ TODO:
 
 """
 
+import argparse
 import curses
 import logging
 import os
 from functools import partial
+from typing import Any
 
 from fuzzum.app.app import App
 from fuzzum.app.cli import init_cli_args
@@ -31,7 +33,7 @@ logging.basicConfig(
 )
 
 
-def main(stdscr: curses.window, args) -> None:
+def main(stdscr: curses.window, args: argparse.Namespace) -> Any:
     stdscr.nodelay(True)
     stdscr.timeout(50)
 
