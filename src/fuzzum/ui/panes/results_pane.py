@@ -14,7 +14,6 @@ from typing import TYPE_CHECKING, Union
 
 from fuzzum.ui.base_window import BaseWindow
 from fuzzum.ui.scroll_bar import ScrollBar
-from fuzzum.utils.file_filter import FileFilter
 
 if TYPE_CHECKING:
     from app.app import App
@@ -30,14 +29,13 @@ class ResultsPane(BaseWindow):
         super().__init__(app, name)
 
         curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
-
-        self.files = FileFilter(self.app.files, self.app.config)
+        self.files = self.app.files
 
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
 
     def get_selected_file(self) -> Union[list[Path], Path]:
-        return self.files[self.cursor].resolve()
+        return self.files[self.cursor]
 
     def create(self) -> None:
         self.win = curses.newwin(self.height - 3, self.width // 2, 0, 0)
@@ -68,10 +66,12 @@ class ResultsPane(BaseWindow):
         self.app.cursor = self.cursor
 
     def toggle_filenames(self) -> None:
+        return
         self.files.show_filename_only = not self.files.show_filename_only
         self.needs_refresh = True
 
     def toggle_hidden_files(self) -> None:
+        return
         self.files.show_hidden_files = not self.files.show_hidden_files
         self.offset = 0
         self.cursor = 0
@@ -84,10 +84,7 @@ class ResultsPane(BaseWindow):
         visible: list[Path] = self.files[self.offset : self.offset + max_rows]
 
         for i, filename in enumerate(visible):
-            if self.files.show_filename_only:
-                file = filename.name
-            else:
-                file = str(filename)
+            file = str(filename)
 
             row: int = i + 1
             text: str = file[:max_width]
