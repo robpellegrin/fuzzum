@@ -82,6 +82,7 @@ class InputHandler:
         elif key == CTRL_KEYS["CTRL_U"]:
             self.app.query = ""
             self.app.wm.search.needs_refresh = True
+            self.app.needs_filter = True
 
         elif 32 <= key <= 126:
             self.app.needs_filter = True
