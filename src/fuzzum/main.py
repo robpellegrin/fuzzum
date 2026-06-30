@@ -5,6 +5,7 @@
 
 
 TODO:
+    - Add '--levels' flag to set depth limit.
     - Add argparse for CLI args to call
         `find .  -type f -name *.py | xargs -P 10 grep "Rob"`.
 
@@ -16,8 +17,10 @@ TODO:
 import curses
 import logging
 import os
+from functools import partial
 
 from fuzzum.app.app import App
+from fuzzum.app.cli import init_cli_args
 
 # Enable logging
 logging.basicConfig(
@@ -28,7 +31,7 @@ logging.basicConfig(
 )
 
 
-def main(stdscr: curses.window) -> None:
+def main(stdscr: curses.window, args) -> None:
     stdscr.nodelay(True)
     stdscr.timeout(50)
 
@@ -40,7 +43,7 @@ def main(stdscr: curses.window) -> None:
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_YELLOW, -1)
 
-    app = App(stdscr)
+    app = App(stdscr, args)
 
     try:
         result = app.run()
@@ -59,14 +62,10 @@ def cli() -> None:
 
         try:
             os.dup2(tty.fileno(), 1)
-            result = curses.wrapper(main)
+            result = curses.wrapper(partial(main, args=init_cli_args()))
         finally:
             os.dup2(old_stdout, 1)
             os.close(old_stdout)
 
     if result:
         print(result)
-
-
-if __name__ == "__main__":
-    curses.wrapper(main)
