@@ -10,14 +10,14 @@
 import curses
 import logging
 from contextlib import contextmanager
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from fuzzum.app.app import App
 
 
 @contextmanager
-def curses_attr(win, attr):
+def curses_attr(win: curses.window, attr: int) -> Any:
     win.attron(attr)
     try:
         yield
@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 class BaseWindow:
 
     def __init__(self, app: "App", name: str):
+        self.win: curses.window
         self.app = app
 
         self.height, self.width = self.app.stdscr.getmaxyx()
