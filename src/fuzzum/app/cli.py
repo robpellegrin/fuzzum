@@ -1,3 +1,14 @@
+"""
+@file:    cli.py
+@author:  Rob Pellegrin
+@date:    06/30/2026
+
+Handles initialization and parsing of CLI arguments.
+
+@updated: 06/30/2026
+
+"""
+
 import argparse
 from os import getcwd
 from pathlib import Path
