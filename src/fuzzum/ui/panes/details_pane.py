@@ -45,7 +45,7 @@ class DetailsPane(BaseWindow):
 
         """
 
-        selected_file = self.app.wm.results.get_selected_file()
+        selected_file = self.app.files[self.app.cursor]
 
         try:
             st = Path(selected_file).stat()
