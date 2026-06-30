@@ -43,6 +43,7 @@ disable = ["missing-class-docstring", "missing-function-docstring"]
 [tool.mypy]
 # Configure the directories and files to be analyzed by mypy.
 files = "app, ui, utils, main.py"
+mypy_path = "$MYPY_CONFIG_FILE_DIR/stubs"
 
 # Enable strict type checking (enforces more thorough type checks).
 strict = true
