@@ -84,7 +84,7 @@ class PreviewPane(BaseWindow):
         return lines
 
     def _is_text_file(self, path: Path) -> bool:
-        if path.suffix.lower() in self.TEXT_EXTENSIONS:
+        if path.suffix in self.TEXT_EXTENSIONS:
             return True
 
         try:
