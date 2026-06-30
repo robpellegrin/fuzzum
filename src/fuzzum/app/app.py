@@ -4,43 +4,41 @@
 @date:    03/11/2026
 
 TODO
-    - Finish metadata.
-    = Enter opens selected file.
-    - File previews.
     - If len(query) > 1 and len(results) < 1, make query text red.
 
-@updated 06/25/2026
+@updated 06/30/2026
 
 """
 
 import curses
 import logging
+import os
 import subprocess
-import sys
 from pathlib import Path
 
 from fuzzum.ui.window_manager import WindowManager
 from fuzzum.utils.config import Config
+from fuzzum.utils.file_filter import FileFilter
 from fuzzum.utils.input_handler import InputHandler
 
 logging.getLogger(__name__)
 
 
 class App:
-    def __init__(self, stdscr: curses.window) -> None:
-        root = sys.argv[1] if len(sys.argv) > 1 else "."
+    def __init__(self, stdscr: curses.window, args) -> None:
+        root = args.path
 
-        self.files = self.scan_files(root)
         self.stdscr = stdscr
         self.query = ""
 
         self.input = InputHandler(self)
 
         self.config = Config()
+        self.files = FileFilter(self.scan_files(root, max_depth=args.depth))
 
         self.wm = WindowManager(self)
         self.wm.create()
-
+        self.needs_filter = True
         self.cursor = 0
 
     def run(self) -> None:
@@ -57,6 +55,11 @@ class App:
                 self.wm.details.needs_refresh = True
                 self.wm.previews.needs_refresh = True
 
+            if self.needs_filter:
+                self.files.filter(self.query)
+                self.needs_filter = False
+                self.wm.results.needs_refresh = True
+
             curses.doupdate()
 
             if not self.running:
@@ -64,10 +67,10 @@ class App:
 
         self.config.save()
 
-        return self.wm.results.get_selected_file()
+        return self.files[self.cursor].resolve()
 
     def tclip(self) -> int:
-        selection = self.wm.results.get_selected_file()
+        selection = self.files[self.cursor].resolve()
         returncode = -1
 
         try:
@@ -89,26 +92,33 @@ class App:
 
         return returncode
 
-    def scan_files(self, root: str) -> list[Path]:
-        files: list[Path] = []
+    def scan_files(self, start_dir: Path, max_depth: int) -> list[Path]:
 
-        # Convert root to a Path object
-        root_path = Path(root)
+        if not isinstance(start_dir, (str, Path)):
+            raise ValueError(f"Invalid directory path: {start_dir}")
 
-        # Using Path.rglob to walk through the directory
-        # Use rglob to traverse through all files and directories
-        # Skip cache files to prevent lots of garbage files.
-        for entry in root_path.rglob("*"):
-            if "cache" in str(entry).lower():
-                continue
+        if not isinstance(max_depth, int) or max_depth < 0:
+            raise ValueError("max_depth must be a non-negative integer")
+
+        files = []
+        stack = [(start_dir, 0)]
+
+        while stack:
+            current_dir, depth = stack.pop()
 
             try:
-                if entry.is_file():
-                    files.append(entry)  # Append the Path object directly
+                with os.scandir(current_dir) as entries:
+                    for entry in entries:
+                        if entry.is_symlink():
+                            continue
+
+                        if entry.is_dir(follow_symlinks=False):
+                            if depth < max_depth:
+                                stack.append((entry.path, depth + 1))
+                        else:
+                            files.append(Path(entry.path))
+
             except PermissionError:
-                pass
+                continue
 
-        if len(files) > 1:
-            files.sort()
-
-        return files  # Ensure to return the list of Path objects
+        return files
