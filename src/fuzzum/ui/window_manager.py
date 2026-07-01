@@ -39,10 +39,10 @@ class WindowManager:
         )
 
         self.window_list = [
-            self.details,
-            self.previews,
             self.results,
+            self.previews,
             self.search,
+            self.details,
         ]
 
         self.create()
@@ -66,7 +66,7 @@ class WindowManager:
         for window in self:
             window.create()
 
-        self.resize()
+        # self.resize()
 
     def refresh(self) -> None:
         for window in self:

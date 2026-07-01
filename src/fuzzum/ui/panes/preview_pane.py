@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class PreviewPane(BaseWindow):
 
-    PREVIEW_LINES = 100
+    PREVIEW_LINES = 25
     MAX_PREVIEW_CACHE = 2_000
 
     TEXT_EXTENSIONS = {
@@ -114,7 +114,7 @@ class PreviewPane(BaseWindow):
 
     def _draw_preview(self) -> None:
         max_lines: int = self.height - 3
-        max_width: int = self.width - 6
+        max_width: int = self.width - 4
 
         if not (selected_file := self.app.files[self.app.cursor]):
             MessagePopup(self).show_message("Nothing to preview.")
@@ -130,11 +130,12 @@ class PreviewPane(BaseWindow):
             MessagePopup(self).show_message("EMPTY FILE")
             return
 
-        for i, line in enumerate(lines[:max_lines]):
-            row: int = i + 1
+        for row, line in enumerate(lines[:max_lines], start=1):
+            # Start printing two cols to the right of box around pane.
+            col = 2
 
             try:
-                self.win.addstr(row, 2, line[:max_width].rstrip())
+                self.win.addnstr(row, col, line.rstrip(), max_width)
             except curses.error as e:
                 logging.error("_draw_preview: %s", e)
 

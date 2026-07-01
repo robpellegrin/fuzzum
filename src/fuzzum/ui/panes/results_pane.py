@@ -35,7 +35,8 @@ class ResultsPane(BaseWindow):
         self.cursor = 0  # selected item
 
     def create(self) -> None:
-        self.win = curses.newwin(self.height - 3, self.width // 2, 0, 0)
+        self.height -= 3
+        self.win = curses.newwin(self.height, self.width, 0, 0)
 
     def header(self, results_count: int = 0) -> None:
         self.win.addstr(
@@ -64,7 +65,7 @@ class ResultsPane(BaseWindow):
 
     def _draw_files(self) -> None:
         max_rows: int = self.height - 2
-        max_width: int = self.width - 5
+        max_width: int = self.width - 4
 
         visible: list[Path] = self.files[self.offset : self.offset + max_rows]
 
