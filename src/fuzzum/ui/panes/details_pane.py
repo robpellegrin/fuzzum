@@ -18,7 +18,7 @@ import logging
 import stat
 from pathlib import Path
 
-from fuzzum.ui.base_window import BaseWindow
+from fuzzum.ui.panes.base_window import BaseWindow
 
 logger = logging.getLogger(__name__)
 

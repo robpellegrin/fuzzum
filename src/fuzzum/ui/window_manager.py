@@ -10,8 +10,8 @@
 import logging
 from typing import TYPE_CHECKING, Iterator
 
-from fuzzum.ui.base_window import BaseWindow
 from fuzzum.ui.help_popup import HelpPopup
+from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.ui.panes.details_pane import DetailsPane
 from fuzzum.ui.panes.preview_pane import PreviewPane
 from fuzzum.ui.panes.results_pane import ResultsPane

@@ -14,7 +14,7 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from fuzzum.ui.base_window import BaseWindow
+from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.ui.popups.message_popup import MessagePopup
 
 if TYPE_CHECKING:

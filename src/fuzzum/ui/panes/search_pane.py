@@ -9,7 +9,7 @@
 
 import curses
 
-from fuzzum.ui.base_window import BaseWindow
+from fuzzum.ui.panes.base_window import BaseWindow
 
 
 class SearchPane(BaseWindow):
