@@ -16,7 +16,7 @@ from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.ui.scroll_bar import ScrollBar
 
 if TYPE_CHECKING:
-    from app.app import App
+    from fuzzum.app.app import App
 
 
 logger = logging.getLogger(__name__)
