@@ -116,7 +116,9 @@ class PreviewPane(BaseWindow):
         max_lines: int = self.height - 3
         max_width: int = self.width - 6
 
-        selected_file: Path = self.app.files[self.app.cursor]
+        if not (selected_file := self.app.files[self.app.cursor]):
+            MessagePopup(self).show_message("Nothing to preview.")
+            return
 
         if not self._is_text_file(selected_file):
             MessagePopup(self).show_message("Binary cannot be previewed.")

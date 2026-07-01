@@ -45,7 +45,8 @@ class DetailsPane(BaseWindow):
 
         """
 
-        selected_file = self.app.files[self.app.cursor]
+        if not (selected_file := self.app.files[self.app.cursor]):
+            return "-"
 
         try:
             st = Path(selected_file).stat()
