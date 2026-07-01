@@ -38,11 +38,11 @@ class InputHandler:
             self.app.wm.previews.needs_refresh = True
             self.app.wm.results.needs_refresh = True
 
-        elif key == ord("."):
-            self.app.wm.results.toggle_hidden_files()
+        # elif key == ord("."):
+        #     self.app.wm.results.toggle_hidden_files()
 
-        elif key == ord(">"):
-            self.app.wm.results.toggle_filenames()
+        # elif key == ord(">"):
+        #     self.app.wm.results.toggle_filenames()
 
         elif key == ord("\n"):
             self.app.running = False
