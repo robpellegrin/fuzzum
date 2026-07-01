@@ -45,6 +45,8 @@ class WindowManager:
             self.search,
         ]
 
+        self.create()
+
     def __iter__(self) -> Iterator[BaseWindow]:
         yield from self.window_list
 

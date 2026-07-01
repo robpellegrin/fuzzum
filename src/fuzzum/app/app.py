@@ -40,7 +40,6 @@ class App:
         self.files = FileFilter(self.scan_files(root, max_depth=args.depth))
 
         self.wm = WindowManager(self)
-        self.wm.create()
         self.needs_filter = True
         self.cursor = 0
 
