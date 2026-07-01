@@ -36,11 +36,15 @@ class FileFilter:
         self._filtered_files = filtered_files
 
     def __getitem__(self, index: Union[int, Path]) -> Union[Path, list[Path]]:
-        # Check if the index is a slice
+        # Prevent indexing an empty list.
+        if not self._filtered_files:
+            return []
+
+        # Check if the index is a slice.
         if isinstance(index, slice):
             return self._filtered_files[index]
 
-        # Handle single index access
+        # Handle single index access.
         if isinstance(index, int):
             # Handle negative indexing
             return self._filtered_files[index % len(self._filtered_files)]
