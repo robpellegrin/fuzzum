@@ -62,18 +62,6 @@ class ResultsPane(BaseWindow):
         self.cursor = max(self.cursor, 0)
         self.app.cursor = self.cursor
 
-    def toggle_filenames(self) -> None:
-        return
-        self.files.show_filename_only = not self.files.show_filename_only
-        self.needs_refresh = True
-
-    def toggle_hidden_files(self) -> None:
-        return
-        self.files.show_hidden_files = not self.files.show_hidden_files
-        self.offset = 0
-        self.cursor = 0
-        self.needs_refresh = True
-
     def _draw_files(self) -> None:
         max_rows: int = self.height - 2
         max_width: int = self.width - 5
