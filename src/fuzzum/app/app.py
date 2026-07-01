@@ -31,17 +31,17 @@ class App:
     ) -> None:
         root = args.path
 
-        self.stdscr = stdscr
+        self.needs_filter = True
+        self.cursor = 0
         self.query = ""
 
-        self.input = InputHandler(self)
+        self.stdscr = stdscr
 
+        self.input = InputHandler(self)
         self.config = Config()
         self.files = FileFilter(self.scan_files(root, max_depth=args.depth))
 
         self.wm = WindowManager(self)
-        self.needs_filter = True
-        self.cursor = 0
 
     def run(self) -> Path:
         self.running = True
