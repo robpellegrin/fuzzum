@@ -48,4 +48,4 @@ class FileFilter:
         raise IndexError("Index out of range")
 
     def __len__(self) -> int:
-        return len(self.files)
+        return len(self._filtered_files)
