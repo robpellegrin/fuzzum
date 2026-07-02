@@ -91,7 +91,7 @@ class PreviewPane(BaseWindow):
             with open(path, "rb") as f:
                 chunk = f.read(8_000)
                 return b"\0" not in chunk
-        except FileNotFoundError, PermissionError:
+        except (FileNotFoundError, PermissionError):
             return False
 
     def _load_preview_async(self, path: Path) -> None:
