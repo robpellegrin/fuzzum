@@ -47,11 +47,9 @@ class ResultsPane(BaseWindow):
         super().draw()
 
         self.scroll_bar = ScrollBar(
-            self.win,
-            self.height - 2,
-            self.width - 2,
-            len(self.files),
-            self.offset,
+            win=self.win,
+            total_rows=len(self.files),
+            offset=self.offset,
         )
 
         self.header(len(self.files))
@@ -67,7 +65,7 @@ class ResultsPane(BaseWindow):
         max_rows: int = self.height - 2
         max_width: int = self.width - 4
 
-        visible: list[Path] = self.files[self.offset: self.offset + max_rows]
+        visible: list[Path] = self.files[self.offset : self.offset + max_rows]
 
         for i, filename in enumerate(visible):
             file = str(filename)
