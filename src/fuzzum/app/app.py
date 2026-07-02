@@ -16,7 +16,6 @@ import logging
 import os
 import subprocess
 from pathlib import Path
-from typing import Union
 
 from fuzzum.ui.window_manager import WindowManager
 from fuzzum.utils.config import Config
@@ -98,12 +97,6 @@ class App:
         return returncode
 
     def scan_files(self, start_dir: Path, max_depth: int) -> list[Path]:
-        if not isinstance(start_dir, Path):
-            raise ValueError(f"Invalid directory path: {start_dir}")
-
-        if not isinstance(max_depth, int) or max_depth < 0:
-            raise ValueError("max_depth must be a non-negative integer")
-
         files: list[Path] = []
         stack: list[tuple[str, int]] = [(str(start_dir), 0)]
 
