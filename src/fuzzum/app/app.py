@@ -16,6 +16,7 @@ import logging
 import os
 import subprocess
 from pathlib import Path
+from typing import Union
 
 from fuzzum.ui.window_manager import WindowManager
 from fuzzum.utils.config import Config
@@ -69,12 +70,12 @@ class App:
 
         self.config.save()
 
-        selected_file: Path = self.files[self.cursor].resolve()
+        selected_file: Path = self.files[self.cursor]
 
         return selected_file
 
     def tclip(self) -> int:
-        selection = self.files[self.cursor].resolve()
+        selection = self.files[self.cursor]
         returncode = -1
 
         try:
@@ -96,32 +97,34 @@ class App:
 
         return returncode
 
-    def scan_files(self, start_dir: str, max_depth: int) -> list[Path]:
-
-        if not isinstance(start_dir, (str, Path)):
+    def scan_files(self, start_dir: Path, max_depth: int) -> list[Path]:
+        if not isinstance(start_dir, Path):
             raise ValueError(f"Invalid directory path: {start_dir}")
 
         if not isinstance(max_depth, int) or max_depth < 0:
             raise ValueError("max_depth must be a non-negative integer")
 
         files: list[Path] = []
-        stack: list[tuple[str, int]] = [(start_dir, 0)]
+        stack: list[tuple[str, int]] = [(str(start_dir), 0)]
 
         while stack:
+            current_dir: str
+            depth: int
+
             current_dir, depth = stack.pop()
 
             try:
                 with os.scandir(current_dir) as entries:
                     for entry in entries:
-                        if entry.is_symlink():
+                        if entry.is_file(follow_symlinks=False):
+                            files.append(Path(entry.path))
                             continue
 
-                        if entry.is_dir(follow_symlinks=False):
-                            if depth < max_depth:
-                                stack.append((entry.path, depth + 1))
-                        else:
-                            files.append(Path(entry.path))
+                        if not entry.is_dir(follow_symlinks=False):
+                            continue
 
+                        if depth < max_depth:
+                            stack.append((entry.path, depth + 1))
             except PermissionError:
                 continue
 
