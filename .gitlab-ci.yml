@@ -1,0 +1,9 @@
+complexity:
+    image: python:3.11
+    script:
+        - pip install complexipy
+        - complexipy . --output-format gitlab --output complexipy-code-quality.json --ignore-complexity
+    artifacts:
+        when: always
+        reports:
+            codequality: complexipy-code-quality.json
