@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from fuzzum.ui.panes.base_window import BaseWindow
 
 if TYPE_CHECKING:
-    from fuzzum.app.app import App
+    from fuzzum.app import App
 
 
 class SearchPane(BaseWindow):

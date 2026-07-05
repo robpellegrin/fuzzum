@@ -13,7 +13,7 @@ from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from fuzzum.app.app import App
+    from fuzzum.app import App
 
 
 @contextmanager

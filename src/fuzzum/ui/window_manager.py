@@ -19,7 +19,7 @@ from fuzzum.ui.panes.results_pane import ResultsPane
 from fuzzum.ui.panes.search_pane import SearchPane
 
 if TYPE_CHECKING:
-    from app.app import App
+    from fruzzum.app import App
 
 logger = logging.getLogger(__name__)
 

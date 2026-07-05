@@ -17,8 +17,8 @@ from functools import partial
 from pathlib import Path
 from typing import Any
 
-from fuzzum.app.app import App
-from fuzzum.app.cli import init_cli_args
+from fuzzum.app import App
+from fuzzum.cli import init_cli_args
 
 # Enable logging
 logging.basicConfig(

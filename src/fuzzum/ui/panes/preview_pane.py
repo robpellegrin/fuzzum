@@ -18,7 +18,7 @@ from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.ui.popups.message_popup import MessagePopup
 
 if TYPE_CHECKING:
-    from fuzzum.app.app import App
+    from fuzzum.app import App
 
 logger = logging.getLogger(__name__)
 

@@ -11,7 +11,7 @@ import curses
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from fuzzum.app.app import App
+    from fuzzum.app import App
 
 CTRL_KEYS = {
     "CTRL_A": 1,
