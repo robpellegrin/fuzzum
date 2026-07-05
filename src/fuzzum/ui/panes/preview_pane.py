@@ -108,7 +108,7 @@ class PreviewPane(BaseWindow):
                     self._preview_cache.popitem(last=False)
                     logging.info("Cache is full. Popping LRU")
 
-        except Exception:
+        except (PermissionError, FileNotFoundError):
             with self._preview_lock:
                 self._preview_cache[path] = ["Error reading preview"]
 

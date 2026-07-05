@@ -7,8 +7,8 @@
 
 """
 
-import logging
 import curses
+import logging
 from typing import TYPE_CHECKING, Iterator
 
 from fuzzum.ui.help_popup import HelpPopup
@@ -77,7 +77,7 @@ class WindowManager:
 
         try:
             self.app.stdscr.move(y, x)
-        except Exception:
+        except curses.error:
             pass
 
         curses.doupdate()

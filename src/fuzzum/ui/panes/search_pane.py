@@ -10,10 +10,10 @@
 import curses
 from typing import TYPE_CHECKING
 
+from fuzzum.ui.panes.base_window import BaseWindow
+
 if TYPE_CHECKING:
     from fuzzum.app.app import App
-
-from fuzzum.ui.panes.base_window import BaseWindow
 
 
 class SearchPane(BaseWindow):
@@ -34,7 +34,7 @@ class SearchPane(BaseWindow):
 
         try:
             self.app.stdscr.move(self.base_height - 2, 4 + len(self.app.query))
-        except Exception:
+        except curses.error:
             pass
 
     def update_query(self, query: str) -> None:
