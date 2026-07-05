@@ -46,7 +46,7 @@ class App:
         # Track cursor changes.
         start_cursor: int = self.cursor
 
-        while (key := self.stdscr.getch()) != ord("q"):
+        while (key := self.stdscr.getch()) != ord("\n"):
 
             self.input.handle(key)
 
