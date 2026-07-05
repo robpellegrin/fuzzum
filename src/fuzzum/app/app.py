@@ -48,7 +48,6 @@ class App:
             start_cursor = self.cursor
 
             self.input.handle(key)
-            self.wm.refresh()
 
             # If the cursor moved, notify windows.
             if start_cursor != self.cursor:
@@ -59,6 +58,13 @@ class App:
                 self.files.filter(self.query)
                 self.needs_filter = False
                 self.wm.results.needs_refresh = True
+
+            if self.files:
+                self.wm.search.query_text_color = curses.color_pair(1)
+            else:
+                self.wm.search.query_text_color = curses.color_pair(10)
+
+            self.wm.refresh()
 
             curses.doupdate()
 

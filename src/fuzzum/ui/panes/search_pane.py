@@ -8,11 +8,18 @@
 """
 
 import curses
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from fuzzum.app.app import App
 
 from fuzzum.ui.panes.base_window import BaseWindow
 
 
 class SearchPane(BaseWindow):
+    def __init__(self, app: "App", name: str) -> None:
+        super().__init__(app, name)
+        self.query_text_color: int = curses.color_pair(1)
 
     def create(self) -> None:
         self.win = curses.newwin(3, self.width // 2, self.height - 3, 0)
@@ -23,7 +30,7 @@ class SearchPane(BaseWindow):
         self.win.addstr(0, 2, " Search ", curses.color_pair(3))
 
         # Write query text.
-        self.win.addstr(1, 2, "> " + self.app.query, curses.color_pair(1))
+        self.win.addstr(1, 2, "> " + self.app.query, self.query_text_color)
 
         try:
             self.app.stdscr.move(self.base_height - 2, 4 + len(self.app.query))
