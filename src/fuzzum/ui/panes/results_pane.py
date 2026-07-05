@@ -75,7 +75,7 @@ class ResultsPane(BaseWindow):
 
             try:
                 if self.offset + i == self.cursor:
-                    self.win.addstr(row, 1, "〉" + text, curses.color_pair(4))
+                    self.win.addstr(row, 1, "┃ " + text, curses.color_pair(4))
                 else:
                     self.win.addstr(row, 3, text)
             except curses.error as e:
