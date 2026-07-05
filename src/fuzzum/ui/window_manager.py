@@ -8,6 +8,7 @@
 """
 
 import logging
+import curses
 from typing import TYPE_CHECKING, Iterator
 
 from fuzzum.ui.help_popup import HelpPopup
@@ -78,6 +79,8 @@ class WindowManager:
             self.app.stdscr.move(y, x)
         except Exception:
             pass
+
+        curses.doupdate()
 
     def resize(self) -> None:
         self._resize_results()

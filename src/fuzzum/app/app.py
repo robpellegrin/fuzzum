@@ -66,8 +66,6 @@ class App:
 
             self.wm.refresh()
 
-            curses.doupdate()
-
         self.config.save()
 
         selected_file: Path = self.files[self.cursor]
