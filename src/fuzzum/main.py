@@ -13,8 +13,8 @@ import argparse
 import curses
 import logging
 import os
-from pathlib import Path
 from functools import partial
+from pathlib import Path
 from typing import Any
 
 from fuzzum.app.app import App
