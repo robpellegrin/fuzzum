@@ -3,12 +3,7 @@
 @author  Rob Pellegrin
 @date    03/11/2026
 
-
-TODO:
-    - Add '--levels' flag to set depth limit.
-    - Add argparse for CLI args to call
-        `find .  -type f -name *.py | xargs -P 10 grep "Rob"`.
-
+Main entry point for Fuzzum.
 
 @updated 06/25/2026
 
@@ -18,6 +13,7 @@ import argparse
 import curses
 import logging
 import os
+from pathlib import Path
 from functools import partial
 from typing import Any
 
@@ -34,6 +30,22 @@ logging.basicConfig(
 
 
 def main(stdscr: curses.window, args: argparse.Namespace) -> Any:
+    """Initialize the curses environment and run the application.
+
+    Configures the curses terminal, including input handling, cursor
+    visibility, color support, and color pairs. After initialization,
+    constructs the application and enters its main event loop.
+
+    Args:
+        stdscr: The curses standard screen window provided by `curses.wrapper`.
+        args: Parsed command-line arguments.
+
+    Returns:
+        The value returned by `App.run`, which is expected to be a
+        file system Path.
+
+    """
+
     stdscr.nodelay(True)
     stdscr.timeout(50)
 
@@ -49,7 +61,7 @@ def main(stdscr: curses.window, args: argparse.Namespace) -> Any:
     app = App(stdscr, args)
 
     try:
-        result = app.run()
+        result: Path = app.run()
     except KeyboardInterrupt:
         pass
 
@@ -57,7 +69,14 @@ def main(stdscr: curses.window, args: argparse.Namespace) -> Any:
 
 
 def cli() -> None:
-    """Helper function to call main when using as package."""
+    """Run the command-line interface.
+
+    Parses command-line arguments, redirects standard output to the controlling
+    terminal while the curses interface is active, and executes the
+    application. After the curses session exits, restores the original
+    standard output and prints the selected result, if any.
+
+    """
 
     # Curses should write to tty instead of stdout.
     with open("/dev/tty", "w") as tty:

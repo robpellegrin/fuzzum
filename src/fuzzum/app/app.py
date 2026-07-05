@@ -3,10 +3,7 @@
 @author:  Rob Pellegrin
 @date:    03/11/2026
 
-TODO
-    - If len(query) > 1 and len(results) < 1, make query text red.
-
-@updated 06/30/2026
+@updated 07/04/2026
 
 """
 
@@ -44,6 +41,8 @@ class App:
         self.wm = WindowManager(self)
 
     def run(self) -> Path:
+        """Main event loop for App."""
+
         # Track cursor changes.
         start_cursor: int = self.cursor
 
@@ -76,6 +75,8 @@ class App:
         return selected_file
 
     def tclip(self) -> int:
+        """Copies the path to the currently selected file into tmux buffer."""
+
         selection = self.files[self.cursor]
         returncode = -1
 
@@ -99,6 +100,26 @@ class App:
         return returncode
 
     def scan_files(self, start_dir: Path, max_depth: int) -> list[Path]:
+        """
+        Scans a directory tree and return all discovered files.
+
+        Traverses the directory hierarchy rooted at ``start_dir`` using an
+        iterative depth-first search. Symbolic links are not followed to avoid
+        cycles and unintended traversal outside the target tree. Directories
+        that cannot be accessed due to insufficient permissions are skipped.
+
+        Args:
+            start_dir: The root directory from which to begin scanning.
+            max_depth: The maximum directory depth to traverse, relative to
+                `start_dir`. A value of `0` scans only `start_dir` itself,
+                while larger values allow traversal into nested sub
+                directories.
+
+        Returns:
+            A list of :class:`pathlib.Path` objects representing all regular
+            files found within the permitted traversal depth.
+        """
+
         files: list[Path] = []
         stack: list[tuple[str, int]] = [(str(start_dir), 0)]
 
