@@ -63,7 +63,7 @@ def main(stdscr: curses.window, args: argparse.Namespace) -> Any:
     try:
         result: Path = app.run()
     except KeyboardInterrupt:
-        pass
+        return None
 
     return result
 
