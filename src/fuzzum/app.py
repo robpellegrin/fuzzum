@@ -26,7 +26,7 @@ class App:
     def __init__(
         self, stdscr: curses.window, args: argparse.Namespace
     ) -> None:
-        root = args.path
+        root: Path = args.path
 
         self.needs_filter = True
         self.cursor = 0
