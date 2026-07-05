@@ -44,9 +44,6 @@ class InputHandler:
         # elif key == ord(">"):
         #     self.app.wm.results.toggle_filenames()
 
-        elif key == ord("\n"):
-            self.app.running = False
-
         elif key == curses.KEY_BACKSPACE:
             self.app.query = self.app.query[:-1]
             self.app.needs_filter = True

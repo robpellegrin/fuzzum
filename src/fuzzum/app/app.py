@@ -44,8 +44,6 @@ class App:
         self.wm = WindowManager(self)
 
     def run(self) -> Path:
-        self.running = True
-
         while (key := self.stdscr.getch()) != ord("q"):
             start_cursor = self.cursor
 
@@ -63,9 +61,6 @@ class App:
                 self.wm.results.needs_refresh = True
 
             curses.doupdate()
-
-            if not self.running:
-                break
 
         self.config.save()
 
