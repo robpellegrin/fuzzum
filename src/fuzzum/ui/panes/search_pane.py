@@ -17,8 +17,8 @@ if TYPE_CHECKING:
 
 
 class SearchPane(BaseWindow):
-    def __init__(self, app: "App", name: str) -> None:
-        super().__init__(app, name)
+    def __init__(self, app: "App") -> None:
+        super().__init__(app)
         self.query_text_color: int = curses.color_pair(1)
 
     def create(self) -> None:

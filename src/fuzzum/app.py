@@ -9,7 +9,6 @@
 
 import argparse
 import curses
-import logging
 import os
 import subprocess
 from pathlib import Path
@@ -18,8 +17,6 @@ from fuzzum.ui.window_manager import WindowManager
 from fuzzum.utils.config import Config
 from fuzzum.utils.file_filter import FileFilter
 from fuzzum.utils.input_handler import InputHandler
-
-logging.getLogger(__name__)
 
 
 class App:
@@ -33,9 +30,9 @@ class App:
         self.query = ""
 
         self.stdscr = stdscr
+        self.config = Config()
 
         self.input = InputHandler(self)
-        self.config = Config()
         self.files = FileFilter(self.scan_files(root, max_depth=args.depth))
 
         self.wm = WindowManager(self)

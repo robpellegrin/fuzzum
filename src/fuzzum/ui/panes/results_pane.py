@@ -25,8 +25,8 @@ logger = logging.getLogger(__name__)
 class ResultsPane(BaseWindow):
     """Scrollable results pane with highlight and vertical scrollbar."""
 
-    def __init__(self, app: "App", name: str) -> None:
-        super().__init__(app, name)
+    def __init__(self, app: "App") -> None:
+        super().__init__(app)
 
         curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
         self.files = self.app.files

@@ -42,8 +42,8 @@ class PreviewPane(BaseWindow):
         ".js",
     }
 
-    def __init__(self, app: "App", name: str) -> None:
-        super().__init__(app, name)
+    def __init__(self, app: "App") -> None:
+        super().__init__(app)
 
         self._preview_cache: OrderedDict[Path, list[str]] = OrderedDict()
         self._preview_lock = threading.Lock()

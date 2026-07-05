@@ -8,7 +8,6 @@
 """
 
 import curses
-import logging
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
@@ -25,12 +24,9 @@ def curses_attr(win: curses.window, attr: int) -> Any:
         win.attroff(attr)
 
 
-logger = logging.getLogger(__name__)
-
-
 class BaseWindow:
 
-    def __init__(self, app: "App", name: str):
+    def __init__(self, app: "App"):
         self.win: curses.window
         self.app = app
 
@@ -42,16 +38,10 @@ class BaseWindow:
 
         self.needs_refresh = True
         self.visible: bool = True
-        self.name: str = name
-
-        try:
-            self.visible = self.app.config.get("panes", self.name)
-        except KeyError:
-            self.visible = True
 
     def toggle_visibility(self) -> None:
         self.visible = not self.visible
-        self.app.config.set(self.visible, "panes", self.name)
+        self.app.config.set(self.visible, "panes", None)
 
     def resize(self, height: int, width: int) -> None:
         self.height = height
@@ -76,5 +66,3 @@ class BaseWindow:
         self.draw()
         self.win.noutrefresh()
         self.needs_refresh = False
-
-        logging.info("Refreshed %s", self.name)

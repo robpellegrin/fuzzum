@@ -8,7 +8,6 @@
 """
 
 import curses
-import logging
 from typing import TYPE_CHECKING, Iterator
 
 from fuzzum.ui.help_popup import HelpPopup
@@ -21,17 +20,15 @@ from fuzzum.ui.panes.search_pane import SearchPane
 if TYPE_CHECKING:
     from fruzzum.app import App
 
-logger = logging.getLogger(__name__)
-
 
 class WindowManager:
     def __init__(self, app: "App"):
         self.app = app
 
-        self.details = DetailsPane(app, "details")
-        self.previews = PreviewPane(app, "preview")
-        self.results = ResultsPane(app, "results")
-        self.search = SearchPane(app, "search")
+        self.details = DetailsPane(app)
+        self.previews = PreviewPane(app)
+        self.results = ResultsPane(app)
+        self.search = SearchPane(app)
 
         self.details.visible = self.app.config.get("panes", "details") or False
 

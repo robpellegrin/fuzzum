@@ -11,7 +11,6 @@ Main entry point for Fuzzum.
 
 import argparse
 import curses
-import logging
 import os
 from functools import partial
 from pathlib import Path
@@ -19,14 +18,6 @@ from typing import Any
 
 from fuzzum.app import App
 from fuzzum.cli import init_cli_args
-
-# Enable logging
-logging.basicConfig(
-    filename="app.log",
-    filemode="w",
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-)
 
 
 def main(stdscr: curses.window, args: argparse.Namespace) -> Any:
