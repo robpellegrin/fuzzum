@@ -44,8 +44,10 @@ class App:
         self.wm = WindowManager(self)
 
     def run(self) -> Path:
+        # Track cursor changes.
+        start_cursor: int = self.cursor
+
         while (key := self.stdscr.getch()) != ord("q"):
-            start_cursor = self.cursor
 
             self.input.handle(key)
 
@@ -64,6 +66,7 @@ class App:
             else:
                 self.wm.search.query_text_color = curses.color_pair(10)
 
+            start_cursor = self.cursor
             self.wm.refresh()
 
         self.config.save()
