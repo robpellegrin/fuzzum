@@ -16,6 +16,9 @@ class ScrollBar:
         self, win: curses.window, total_rows: int, offset: int
     ) -> None:
         self.win = win
+        self.height: int
+        self.width: int
+
         self.height, self.width = self.win.getmaxyx()
 
         # Adjust height and width to create room for scroll bar.
