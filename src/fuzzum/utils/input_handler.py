@@ -18,10 +18,12 @@ CTRL_KEYS = {
     "CTRL_B": 2,
     "CTRL_C": 3,
     "CTRL_D": 4,
+    "CTRL_E": 5,
     "CTRL_H": 8,
     "CTRL_P": 16,
     "CTRL_T": 20,
     "CTRL_U": 21,
+    "CTRL_Y": 25,
 }
 
 
@@ -52,10 +54,10 @@ class InputHandler:
         ##
         # Navigation
         ##
-        elif key == curses.KEY_UP:
+        elif key in (curses.KEY_UP, CTRL_KEYS["CTRL_Y"]):
             self.app.wm.results.move_up()
 
-        elif key == curses.KEY_DOWN:
+        elif key in (curses.KEY_DOWN, CTRL_KEYS["CTRL_E"]):
             self.app.wm.results.move_down()
 
         elif key == curses.KEY_NPAGE:
