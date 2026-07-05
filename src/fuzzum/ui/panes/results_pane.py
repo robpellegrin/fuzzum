@@ -46,7 +46,7 @@ class ResultsPane(BaseWindow):
     def draw(self) -> None:
         super().draw()
 
-        self.scroll_bar = ScrollBar(
+        scroll_bar = ScrollBar(
             win=self.win,
             total_rows=len(self.files),
             offset=self.offset,
@@ -55,7 +55,7 @@ class ResultsPane(BaseWindow):
         self.header(len(self.files))
 
         self._draw_files()
-        self.scroll_bar.draw()
+        scroll_bar.draw()
 
         self.cursor = min(self.cursor, len(self.files) - 1)
         self.cursor = max(self.cursor, 0)
