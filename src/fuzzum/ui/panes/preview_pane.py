@@ -132,7 +132,7 @@ class PreviewPane(BaseWindow):
 
             try:
                 self.win.addnstr(row, col, line.rstrip(), max_width)
-            except curses.error as e:
+            except curses.error:
                 pass
 
     def sanitize(self, line: str) -> str:
