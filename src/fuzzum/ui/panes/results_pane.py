@@ -28,7 +28,6 @@ class ResultsPane(BaseWindow):
     def __init__(self, app: "App") -> None:
         super().__init__(app)
 
-        curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
         self.files = self.app.files
 
         self.offset = 0  # top visible item
