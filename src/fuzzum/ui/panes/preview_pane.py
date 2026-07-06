@@ -8,7 +8,6 @@
 """
 
 import curses
-import logging
 import threading
 from collections import OrderedDict
 from pathlib import Path
@@ -19,8 +18,6 @@ from fuzzum.ui.popups.message_popup import MessagePopup
 
 if TYPE_CHECKING:
     from fuzzum.app import App
-
-logger = logging.getLogger(__name__)
 
 
 class PreviewPane(BaseWindow):
@@ -106,7 +103,6 @@ class PreviewPane(BaseWindow):
                 # Check if cache is full. Remove LRU if true.
                 if len(self._preview_cache) > self.MAX_PREVIEW_CACHE:
                     self._preview_cache.popitem(last=False)
-                    logging.info("Cache is full. Popping LRU")
 
         except (PermissionError, FileNotFoundError):
             with self._preview_lock:
@@ -137,7 +133,7 @@ class PreviewPane(BaseWindow):
             try:
                 self.win.addnstr(row, col, line.rstrip(), max_width)
             except curses.error as e:
-                logging.error("_draw_preview: %s", e)
+                pass
 
     def sanitize(self, line: str) -> str:
         """Returns a string of only ASCII characters and newlines."""

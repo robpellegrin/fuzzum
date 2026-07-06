@@ -14,13 +14,10 @@ TODO:
 
 import curses
 import datetime
-import logging
 import stat
 from pathlib import Path
 
 from fuzzum.ui.panes.base_window import BaseWindow
-
-logger = logging.getLogger(__name__)
 
 
 class DetailsPane(BaseWindow):
@@ -58,8 +55,6 @@ class DetailsPane(BaseWindow):
         perms = stat.filemode(st.st_mode)
         size = self._human_readable_size(st.st_size)
         mtime = datetime.datetime.fromtimestamp(st.st_mtime)
-
-        logger.debug("DetailsPane has file: %s", selected_file)
 
         self.needs_refresh = True
 

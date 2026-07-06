@@ -8,7 +8,6 @@
 """
 
 import curses
-import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -17,9 +16,6 @@ from fuzzum.ui.scroll_bar import ScrollBar
 
 if TYPE_CHECKING:
     from fuzzum.app import App
-
-
-logger = logging.getLogger(__name__)
 
 
 class ResultsPane(BaseWindow):
@@ -77,8 +73,8 @@ class ResultsPane(BaseWindow):
                     self.win.addstr(row, 1, "┃ " + text, curses.color_pair(4))
                 else:
                     self.win.addstr(row, 3, text)
-            except curses.error as e:
-                logging.error("_draw_files: %s", e)
+            except curses.error:
+                pass
 
     ##
     # Scrolling
