@@ -18,9 +18,19 @@ from fuzzum.utils.curse_catcher import curse_catch
 
 class DetailsPane(BaseWindow):
 
+    def __init__(self, app) -> None:
+        super().__init__(app)
+        self.set_size()
+
+    def set_size(self) -> None:
+        height, width = self.win.getmaxyx()
+
+        self.height = height - 3
+        self.width = width // 2
+
     def create(self) -> None:
         self.win = curses.newwin(
-            3, self.width // 2, self.height - 3, self.width // 2
+            3, self.width, self.height, self.width
         )
 
     @curse_catch

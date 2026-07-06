@@ -46,12 +46,20 @@ class PreviewPane(BaseWindow):
         self._preview_cache: OrderedDict[Path, list[str]] = OrderedDict()
         self._preview_lock = threading.Lock()
 
+        self.set_size()
+
+    def set_size(self) -> None:
+        height, width = self.win.getmaxyx()
+
+        self.height = height - 3
+        self.width = width // 2
+
     @curse_catch
     def create(self) -> None:
-        left_width = self.width // 2
+        left_width = self.width
         right_width = self.width - left_width
 
-        self.win = curses.newwin(self.height - 2, right_width, 0, left_width)
+        self.win = curses.newwin(self.height, right_width, 0, left_width)
 
     @curse_catch
     def draw(self) -> None:
@@ -113,7 +121,7 @@ class PreviewPane(BaseWindow):
 
     @curse_catch
     def _draw_preview(self) -> None:
-        max_lines: int = self.height - 3
+        max_lines: int = self.height
         max_width: int = self.width - 4
 
         if not (selected_file := self.app.files[self.app.cursor]):

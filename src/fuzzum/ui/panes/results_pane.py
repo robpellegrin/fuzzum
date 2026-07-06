@@ -30,9 +30,16 @@ class ResultsPane(BaseWindow):
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
 
+        self.set_size()
+
+    def set_size(self) -> None:
+        height, width = self.win.getmaxyx()
+
+        self.height = height - 3
+        self.width = width // 2
+
     @curse_catch
     def create(self) -> None:
-        self.height -= 3
         self.win = curses.newwin(self.height, self.width, 0, 0)
 
     @curse_catch
@@ -61,10 +68,10 @@ class ResultsPane(BaseWindow):
 
     @curse_catch
     def _draw_files(self) -> None:
-        max_rows: int = self.height - 2
-        max_width: int = self.width - 4
+        max_rows: int = self.height + 1
+        max_width: int = self.width
 
-        visible: list[Path] = self.files[self.offset : self.offset + max_rows]
+        visible: list[Path] = self.files[self.offset: self.offset + max_rows]
 
         for i, filename in enumerate(visible):
             file = str(filename)

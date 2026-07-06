@@ -63,8 +63,7 @@ class WindowManager:
     def create(self) -> None:
         for window in self:
             window.create()
-
-        self.resize()
+            window.set_size()
 
     def refresh(self) -> None:
         for window in self:
@@ -80,39 +79,6 @@ class WindowManager:
         curses.doupdate()
 
     def resize(self) -> None:
-        self._resize_results()
-        self._resize_details()
-        self._resize_search()
-        self._resize_previews()
-
-    def _resize_results(self) -> None:
-        height, width = self.app.stdscr.getmaxyx()
-
-        if self.previews.visible:
-            width //= 2
-
-        self.results.resize(height - 3, width)
-
-    def _resize_previews(self) -> None:
-        if not self.previews.visible:
-            return
-
-        height, width = self.app.stdscr.getmaxyx()
-
-        self.previews.resize(height - 3, width // 2)
-
-    def _resize_details(self) -> None:
-        if not self.details.visible:
-            return
-
-        _, width = self.app.stdscr.getmaxyx()
-
-        self.details.resize(3, width // 2)
-
-    def _resize_search(self) -> None:
-        _, width = self.app.stdscr.getmaxyx()
-
-        if self.details.visible:
-            width //= 2
-
-        self.search.resize(3, width)
+        for window in self:
+            window.set_size()
+            window.needs_refresh = True

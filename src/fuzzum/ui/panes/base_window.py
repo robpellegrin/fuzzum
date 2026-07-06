@@ -29,7 +29,7 @@ def curses_attr(win: curses.window, attr: int) -> Any:
 class BaseWindow:
 
     def __init__(self, app: "App"):
-        self.win: curses.window
+        self.win: curses.window = app.stdscr
         self.app = app
 
         self.height: int
@@ -43,13 +43,8 @@ class BaseWindow:
         self.visible = not self.visible
         self.app.config.set(self.visible, "panes", None)
 
-    @curse_catch
-    def resize(self, height: int, width: int) -> None:
-        self.height = height
-        self.width = width
-
-        # Keep values used by parent class up to date.
-        self.win.resize(height, width)
+    def set_size(self) -> None:
+        raise NotImplementedError
 
     @curse_catch
     def draw(self) -> None:
