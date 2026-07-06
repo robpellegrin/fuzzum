@@ -24,7 +24,10 @@ class SearchPane(BaseWindow):
         self.win.addstr(1, 2, "> " + self.app.query, self.query_text_color)
 
         try:
-            self.app.stdscr.move(self.base_height - 2, 4 + len(self.app.query))
+            self.app.stdscr.move(
+                self.height - 2,  # Offset for boarder.
+                len(self.app.query) + 4,  # Offset for boarder and pretext.
+            )
         except curses.error:
             pass
 
