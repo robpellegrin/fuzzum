@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 
 from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.ui.scroll_bar import ScrollBar
+from fuzzum.utils.curse_catcher import curse_catch
 
 if TYPE_CHECKING:
     from fuzzum.app import App
@@ -29,10 +30,12 @@ class ResultsPane(BaseWindow):
         self.offset = 0  # top visible item
         self.cursor = 0  # selected item
 
+    @curse_catch
     def create(self) -> None:
         self.height -= 3
         self.win = curses.newwin(self.height, self.width, 0, 0)
 
+    @curse_catch
     def header(self, results_count: int = 0) -> None:
         self.win.addstr(
             0, 1, f" Results —— ({results_count:,d}) ", curses.color_pair(3)
@@ -56,6 +59,7 @@ class ResultsPane(BaseWindow):
         self.cursor = max(self.cursor, 0)
         self.app.cursor = self.cursor
 
+    @curse_catch
     def _draw_files(self) -> None:
         max_rows: int = self.height - 2
         max_width: int = self.width - 4
@@ -68,13 +72,10 @@ class ResultsPane(BaseWindow):
             row: int = i + 1
             text: str = file[:max_width]
 
-            try:
-                if self.offset + i == self.cursor:
-                    self.win.addstr(row, 1, "┃ " + text, curses.color_pair(4))
-                else:
-                    self.win.addstr(row, 3, text)
-            except curses.error:
-                pass
+            if self.offset + i == self.cursor:
+                self.win.addstr(row, 1, "┃ " + text, curses.color_pair(4))
+            else:
+                self.win.addstr(row, 3, text)
 
     ##
     # Scrolling

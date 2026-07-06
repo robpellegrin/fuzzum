@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING
 
 from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.ui.popups.message_popup import MessagePopup
+from fuzzum.utils.curse_catcher import curse_catch
 
 if TYPE_CHECKING:
     from fuzzum.app import App
@@ -45,12 +46,14 @@ class PreviewPane(BaseWindow):
         self._preview_cache: OrderedDict[Path, list[str]] = OrderedDict()
         self._preview_lock = threading.Lock()
 
+    @curse_catch
     def create(self) -> None:
         left_width = self.width // 2
         right_width = self.width - left_width
 
         self.win = curses.newwin(self.height - 2, right_width, 0, left_width)
 
+    @curse_catch
     def draw(self) -> None:
         super().draw()
 
@@ -108,6 +111,7 @@ class PreviewPane(BaseWindow):
             with self._preview_lock:
                 self._preview_cache[path] = ["Error reading preview"]
 
+    @curse_catch
     def _draw_preview(self) -> None:
         max_lines: int = self.height - 3
         max_width: int = self.width - 4
@@ -130,10 +134,7 @@ class PreviewPane(BaseWindow):
             # Start printing two cols to the right of box around pane.
             col = 2
 
-            try:
-                self.win.addnstr(row, col, line.rstrip(), max_width)
-            except curses.error:
-                pass
+            self.win.addnstr(row, col, line.rstrip(), max_width)
 
     def sanitize(self, line: str) -> str:
         """Returns a string of only ASCII characters and newlines."""

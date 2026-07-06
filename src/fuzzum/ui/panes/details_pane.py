@@ -18,6 +18,7 @@ import stat
 from pathlib import Path
 
 from fuzzum.ui.panes.base_window import BaseWindow
+from fuzzum.utils.curse_catcher import curse_catch
 
 
 class DetailsPane(BaseWindow):
@@ -27,6 +28,7 @@ class DetailsPane(BaseWindow):
             3, self.width // 2, self.height - 3, self.width // 2
         )
 
+    @curse_catch
     def draw(self) -> None:
         super().draw()
         self.win.addstr(0, 2, " Details ", curses.color_pair(3))

@@ -11,6 +11,8 @@ import curses
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any
 
+from fuzzum.utils.curse_catcher import curse_catch
+
 if TYPE_CHECKING:
     from fuzzum.app import App
 
@@ -34,8 +36,6 @@ class BaseWindow:
         self.width: int
         self.height, self.width = self.app.stdscr.getmaxyx()
 
-        self.base_height: int = self.height
-
         self.needs_refresh = True
         self.visible: bool = True
 
@@ -43,6 +43,7 @@ class BaseWindow:
         self.visible = not self.visible
         self.app.config.set(self.visible, "panes", None)
 
+    @curse_catch
     def resize(self, height: int, width: int) -> None:
         self.height = height
         self.width = width
@@ -50,6 +51,7 @@ class BaseWindow:
         # Keep values used by parent class up to date.
         self.win.resize(height, width)
 
+    @curse_catch
     def draw(self) -> None:
         self.win.erase()
 
