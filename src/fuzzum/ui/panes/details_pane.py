@@ -65,8 +65,7 @@ class DetailsPane(BaseWindow):
 
         return f"{perms} | {mtime.strftime('%y-%m-%d %H:%M:%S')} | {size}"
 
-    @staticmethod
-    def _human_readable_size(size: float) -> str:
+    def _human_readable_size(self, size: float) -> str:
         """
         Convert bytes into a human-readable format.
 
