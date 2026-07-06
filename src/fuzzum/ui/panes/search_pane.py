@@ -21,7 +21,7 @@ class SearchPane(BaseWindow):
     def draw(self) -> None:
         super().draw()
 
-        self.win.addstr(0, 2, " Search ", curses.color_pair(3))
+        self.win.addstr(0, 2, "Search", curses.color_pair(3))
 
         self.win.addstr(1, 2, "> " + self.app.query, self.query_text_color)
 

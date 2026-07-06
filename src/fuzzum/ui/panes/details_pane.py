@@ -26,7 +26,7 @@ class DetailsPane(BaseWindow):
     @curse_catch
     def draw(self) -> None:
         super().draw()
-        self.win.addstr(0, 2, " Details ", curses.color_pair(3))
+        self.win.addstr(0, 2, "Details", curses.color_pair(3))
 
         details_str: str = self._stat_file()
 

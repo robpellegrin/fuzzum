@@ -38,7 +38,7 @@ class ResultsPane(BaseWindow):
     @curse_catch
     def header(self, results_count: int = 0) -> None:
         self.win.addstr(
-            0, 1, f" Results —— ({results_count:,d}) ", curses.color_pair(3)
+            0, 2, f"Results —— ({results_count:,d})", curses.color_pair(3)
         )
 
     def draw(self) -> None:
