@@ -10,6 +10,7 @@ Because the selected path is written to `stdout`, Fuzzum integrates well with sh
 * Fast recursive file discovery
 * Configurable search depth
 * Outputs the selected file path to `stdout`
+* Quickly copy selected file to `tmux` buffer
 * Designed for use in shell scripts and pipelines
 
 ## Requirements
