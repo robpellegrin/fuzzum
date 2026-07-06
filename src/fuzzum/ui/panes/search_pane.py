@@ -8,19 +8,10 @@
 """
 
 import curses
-from typing import TYPE_CHECKING
-
 from fuzzum.ui.panes.base_window import BaseWindow
-
-if TYPE_CHECKING:
-    from fuzzum.app import App
 
 
 class SearchPane(BaseWindow):
-    def __init__(self, app: "App") -> None:
-        super().__init__(app)
-        self.query_text_color: int = curses.color_pair(1)
-
     def create(self) -> None:
         self.win = curses.newwin(3, self.width // 2, self.height - 3, 0)
 
