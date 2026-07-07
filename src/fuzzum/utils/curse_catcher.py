@@ -1,12 +1,13 @@
 import curses
+import functools
 
 
 def curse_catch(func):
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            result = func(*args, **kwargs)
+            return func(*args, **kwargs)
         except curses.error:
-            pass
-        return result
+            return None
 
     return wrapper
