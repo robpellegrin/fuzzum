@@ -49,8 +49,8 @@ class App:
 
             # If the cursor moved, notify windows.
             if start_cursor != self.cursor:
-                self.wm.details.needs_refresh = True
-                self.wm.previews.needs_refresh = True
+                for window in self.wm:
+                    window.needs_refresh = True
 
             if self.needs_filter:
                 self.files.filter(self.query)
