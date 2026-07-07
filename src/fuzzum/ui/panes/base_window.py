@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03/11/2026
 
-@updated 06/25/2026
+@updated 07/06/2026
 
 """
 
@@ -29,22 +29,27 @@ def curses_attr(win: curses.window, attr: int) -> Any:
 class BaseWindow:
 
     def __init__(self, app: "App"):
-        self.win: curses.window = app.stdscr
         self.app = app
+        self.win: curses.window
 
-        self.height: int
-        self.width: int
-        self.height, self.width = self.app.stdscr.getmaxyx()
+        self.height = 0
+        self.width = 0
+
+        self.x = 0
+        self.y = 0
 
         self.needs_refresh = True
         self.visible: bool = True
 
-    def toggle_visibility(self) -> None:
-        self.visible = not self.visible
-        self.app.config.set(self.visible, "panes", None)
-
     def set_size(self) -> None:
         raise NotImplementedError
+
+    def create(self) -> None:
+        self.win = curses.newwin(self.height, self.width, self.y, self.x)
+
+    def toggle_visibility(self) -> None:
+        self.visible = not self.visible
+        self.app.config.set(self.visible, "panes", __file__)
 
     @curse_catch
     def draw(self) -> None:
@@ -52,9 +57,6 @@ class BaseWindow:
 
         with curses_attr(self.win, curses.color_pair(0) | curses.A_DIM):
             self.win.box()
-
-    def create(self) -> None:
-        raise NotImplementedError
 
     def refresh_window(self) -> None:
         if not self.needs_refresh or not self.visible:

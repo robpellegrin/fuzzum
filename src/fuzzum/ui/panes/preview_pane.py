@@ -49,10 +49,10 @@ class PreviewPane(BaseWindow):
         self.set_size()
 
     def set_size(self) -> None:
-        height, width = self.win.getmaxyx()
+        height, width = self.app.stdscr.getmaxyx()
 
         self.height = height - 3
-        self.width = width // 2
+        self.width = width - (width // 2)
 
     @curse_catch
     def create(self) -> None:
@@ -121,7 +121,7 @@ class PreviewPane(BaseWindow):
 
     @curse_catch
     def _draw_preview(self) -> None:
-        max_lines: int = self.height
+        max_lines: int = self.height - 2
         max_width: int = self.width - 4
 
         if not (selected_file := self.app.files[self.app.cursor]):

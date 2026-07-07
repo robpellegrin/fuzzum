@@ -11,27 +11,29 @@ import curses
 import datetime
 import stat
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from fuzzum.ui.panes.base_window import BaseWindow
 from fuzzum.utils.curse_catcher import curse_catch
 
+if TYPE_CHECKING:
+    from fuzzum.app import App
+
 
 class DetailsPane(BaseWindow):
 
-    def __init__(self, app) -> None:
+    def __init__(self, app: "App") -> None:
         super().__init__(app)
         self.set_size()
 
     def set_size(self) -> None:
-        height, width = self.win.getmaxyx()
+        screen_h, screen_w = self.app.stdscr.getmaxyx()
 
-        self.height = height - 3
-        self.width = width // 2
+        self.height = 3
+        self.width = screen_w - (screen_w // 2)
 
-    def create(self) -> None:
-        self.win = curses.newwin(
-            3, self.width, self.height, self.width
-        )
+        self.x = self.width
+        self.y = screen_h - 3
 
     @curse_catch
     def draw(self) -> None:
