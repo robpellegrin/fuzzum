@@ -62,15 +62,15 @@ class WindowManager:
 
     def create(self) -> None:
         for window in self:
-            window.create()
             window.set_size()
+            window.create()
 
     def refresh(self) -> None:
         for window in self:
             window.refresh_window()
 
+        # Keep cursor in search pane.
         y, x = self.search.get_cursor_position()
-
         try:
             self.app.stdscr.move(y, x)
         except curses.error:
