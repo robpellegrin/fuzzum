@@ -35,16 +35,16 @@ class InputHandler:
         ##
         # Special keys
         ##
-        if key == ord("?"):
+        if key == curses.KEY_RESIZE:
+            for pane in self.app.wm:
+                pane.set_size()
+                pane.create()
+                pane.needs_refresh = True
+
+        elif key == ord("?"):
             self.app.wm.help.show()
             self.app.wm.previews.needs_refresh = True
             self.app.wm.results.needs_refresh = True
-
-        # elif key == ord("."):
-        #     self.app.wm.results.toggle_hidden_files()
-
-        # elif key == ord(">"):
-        #     self.app.wm.results.toggle_filenames()
 
         elif key == curses.KEY_BACKSPACE:
             self.app.query = self.app.query[:-1]
@@ -65,9 +65,6 @@ class InputHandler:
 
         elif key == curses.KEY_PPAGE:
             self.app.wm.results.page_up()
-
-        elif key == curses.KEY_RESIZE:
-            self.app.wm.resize()
 
         elif key == CTRL_KEYS["CTRL_P"]:
             self.app.wm.toggle_window(self.app.wm.previews)
