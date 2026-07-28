@@ -15,7 +15,7 @@ Because the selected path is written to `stdout`, Fuzzum integrates well with sh
 
 ## Requirements
 
-* Python 3.9 or newer
+* Python >= 3.9
 * A Unix-like operating system with `curses` support
 
 ## Installation
@@ -23,7 +23,7 @@ Because the selected path is written to `stdout`, Fuzzum integrates well with sh
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/fuzzum.git
+git clone https://gitlab.robpellegrin.com/src/fuzzum.git
 cd fuzzum
 ```
 
