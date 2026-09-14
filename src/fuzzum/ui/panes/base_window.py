@@ -49,7 +49,6 @@ class BaseWindow:
 
     def toggle_visibility(self) -> None:
         self.visible = not self.visible
-        self.app.config.set(self.visible, "panes", __file__)
 
     @curse_catch
     def draw(self) -> None:

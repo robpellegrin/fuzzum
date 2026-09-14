@@ -14,7 +14,6 @@ import subprocess
 from pathlib import Path
 
 from fuzzum.ui.window_manager import WindowManager
-from fuzzum.utils.config import Config
 from fuzzum.utils.file_filter import FileFilter
 from fuzzum.utils.input_handler import InputHandler
 
@@ -30,7 +29,6 @@ class App:
         self.query = ""
 
         self.stdscr = stdscr
-        self.config = Config()
 
         self.input = InputHandler(self)
         self.files = FileFilter(self.scan_files(root, max_depth=args.depth))
@@ -64,8 +62,6 @@ class App:
 
             start_cursor = self.cursor
             self.wm.refresh()
-
-        self.config.save()
 
         selected_file: Path = self.files[self.cursor]
 
