@@ -3,7 +3,7 @@
 @author  Rob Pellegrin
 @date    03/11/2026
 
-@updated 06/25/2026
+@updated 09/14/2026
 
 """
 
@@ -148,12 +148,12 @@ class PreviewPane(BaseWindow):
         """Returns a string of only ASCII characters and newlines."""
 
         sanitized_line = ""
+        valid_ascii_range = range(32, 126)
 
         for ch in line:
-            if 32 <= ord(ch) <= 126:
-                sanitized_line += ch
+            if ord(ch) not in valid_ascii_range:
+                continue
 
-            if ch == "\n":
-                sanitized_line += ch
+            sanitized_line += ch
 
         return sanitized_line
