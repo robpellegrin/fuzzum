@@ -85,6 +85,10 @@ cat "$(fuzz)"
 | `path`      | Root directory to search. Defaults to the current working directory.                  |
 | `--depth N` | Maximum directory depth to traverse. A value of `0` searches only the root directory. |
 
+## Screenshots
+
+![Screenshot](.img/screenshot-1.png)
+
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
